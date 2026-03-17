@@ -446,12 +446,13 @@ function formatPT(minutes) {
 //  STATE
 // ════════════════════════════════════════════════════════════════════════════
 const state = {
-  tab:         null,
-  settings:    { ...DEFAULTS },
-  detected:    null,   // { type, frameId, lms, version, currentStatus, currentScore }
-  phase:       'idle',
-  scanAttempt: 0,
-  retryTimer:  null,
+  tab:           null,
+  settings:      { ...DEFAULTS },
+  detected:      null,   // { type, frameId, lms, version, currentStatus, currentScore }
+  phase:         'idle',
+  scanAttempt:   0,
+  retryTimer:    null,
+  tickerInterval: null,
 };
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -478,6 +479,9 @@ function setPhase(p) {
   };
   btn.textContent = labels[p] ?? '▶  Complete Course';
   btn.disabled = !['ready', 'error'].includes(p);
+  // Update phase-dot aria-label for screen readers
+  const dot = document.querySelector('.phase-dot');
+  if (dot) dot.setAttribute('aria-label', `Status: ${p}`);
 }
 
 function showCard(id) {
@@ -600,6 +604,10 @@ function bindQuickSettings() {
     state.settings.score = v;
     chrome.storage.sync.set({ score: v });
   });
+  $('qScore')?.addEventListener('input', e => {
+    const v = parseInt(e.target.value, 10);
+    if (!isNaN(v)) state.settings.score = Math.min(100, Math.max(0, v));
+  });
   $('qTime')?.addEventListener('change', e => {
     let v = parseFloat(e.target.value);
     if (isNaN(v) || v < 0)   v = 0;
@@ -608,6 +616,10 @@ function bindQuickSettings() {
     state.settings.sessionMinutes = v;
     chrome.storage.sync.set({ sessionMinutes: v });
   });
+  $('qTime')?.addEventListener('input', e => {
+    const v = parseFloat(e.target.value);
+    if (!isNaN(v)) state.settings.sessionMinutes = Math.min(999, Math.max(0, v));
+  });
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -615,6 +627,7 @@ function bindQuickSettings() {
 // ════════════════════════════════════════════════════════════════════════════
 async function runScan(isRetry = false) {
   if (state.retryTimer) { clearTimeout(state.retryTimer); state.retryTimer = null; }
+  if (state.tickerInterval) { clearInterval(state.tickerInterval); state.tickerInterval = null; }
   if (!isRetry) {
     state.scanAttempt = 0;
     state.detected    = null;
@@ -720,13 +733,14 @@ async function runScan(isRetry = false) {
     if (retryNumEl) retryNumEl.textContent = `Attempt ${state.scanAttempt} of ${maxRetries}`;
     if (countEl) countEl.textContent = `${remaining}s`;
 
-    const ticker = setInterval(() => {
+    state.tickerInterval = setInterval(() => {
       remaining = Math.max(0, remaining - 1);
       if (countEl) countEl.textContent = `${remaining}s`;
     }, 1000);
 
     state.retryTimer = setTimeout(() => {
-      clearInterval(ticker);
+      clearInterval(state.tickerInterval);
+      state.tickerInterval = null;
       runScan(true);
     }, delay);
 
@@ -799,8 +813,10 @@ async function runCompletion() {
     });
   } catch (err) {
     appendLog([
-      { t: 'e', m: `Injection failed: ${err.message}` },
-      { t: 'w', m: 'The frame may have navigated. Click Re-scan and try again.' },
+      { t: 'e', m: `Script injection failed: ${err.message}` },
+      { t: 'w', m: '1 — The frame may have navigated — click Re-scan and try again' },
+      { t: 'w', m: '2 — chrome://, extension://, or file:// pages cannot be injected' },
+      { t: 'w', m: '3 — Extension permissions may have changed' },
     ]);
     setPhase('error');
     $('scanBtn').disabled = false;
@@ -809,7 +825,10 @@ async function runCompletion() {
 
   const log = results?.[0]?.result ?? [];
   if (!log.length) {
-    appendLog([{ t: 'e', m: 'Completion function returned no output (unexpected)' }]);
+    appendLog([
+      { t: 'e', m: 'Completion function returned no output (unexpected)' },
+      { t: 'w', m: 'Try Re-scan and complete again. If this persists, file a bug.' },
+    ]);
     setPhase('error');
     $('scanBtn').disabled = false;
     return;
@@ -823,6 +842,7 @@ async function runCompletion() {
     $('scanBtn').disabled = false;
   } else {
     setPhase('done');
+    $('scanBtn').disabled = false;
     // Flip the status badge in the result card
     const sb = $('statusBadge');
     if (sb) { sb.textContent = 'Complete'; sb.dataset.state = 'done'; }
@@ -866,6 +886,12 @@ function copyLog() {
     btn.textContent = 'Copied ✓';
     btn.classList.add('copy--done');
     setTimeout(() => { btn.textContent = orig; btn.classList.remove('copy--done'); }, 2000);
+  }).catch(() => {
+    const btn = $('copyBtn');
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = 'Copy failed';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
   });
 }
 

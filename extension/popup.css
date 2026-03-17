@@ -5,13 +5,13 @@
    ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --bg:         #050b12;
-  --bg2:        #08111c;
-  --surface:    #0c1825;
+  --bg:         #060c14;
+  --bg2:        #09111e;
+  --surface:    #0d1c2c;
   --surface2:   #101f30;
-  --surface3:   #162535;
-  --line:       #192e42;
-  --line2:      #1f3a50;
+  --surface3:   #142538;
+  --line:       #1a2e42;
+  --line2:      #203a52;
   --line3:      #254459;
 
   --text:       #eef6ff;
@@ -20,8 +20,7 @@
   --muted2:     #567898;
 
   --teal:       #00d4a8;
-  --teal-glow:  rgba(0, 212, 168, 0.18);
-  --teal-ring:  rgba(0, 212, 168, 0.08);
+  --teal-dim:   rgba(0, 212, 168, 0.15);
   --green:      #18cc72;
   --green-dim:  rgba(24, 204, 114, 0.12);
   --amber:      #f5a020;
@@ -70,7 +69,7 @@ body {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 1.5px;
+  height: 2px;
   background: linear-gradient(90deg,
     transparent 0%, var(--teal) 35%, var(--teal) 65%, transparent 100%);
   opacity: 0.45;
@@ -112,6 +111,7 @@ body {
   flex-shrink: 0;
 }
 .icon-btn:hover { color: var(--text2); border-color: var(--line3); background: var(--surface2); }
+.icon-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
 
 /* ── PHASE DOT ──────────────────────────────────────────────────────────── */
@@ -134,8 +134,8 @@ body {
 [data-phase="unsupported"].phase-dot { background: var(--amber); opacity: .6; }
 
 @keyframes dot-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 currentColor; }
-  50%       { box-shadow: 0 0 0 4px transparent; }
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.6); opacity: 0.5; }
 }
 
 
@@ -284,7 +284,7 @@ body {
 .lms-icon {
   width: 30px; height: 30px;
   border-radius: 7px;
-  background: var(--teal-glow);
+  background: var(--teal-dim);
   border: 1px solid rgba(0,212,168,.22);
   display: flex; align-items: center; justify-content: center;
   color: var(--teal); font-size: 14px;
@@ -314,7 +314,7 @@ body {
 }
 
 .badge--std {
-  background: var(--teal-glow);
+  background: var(--teal-dim);
   color: var(--teal);
   border: 1px solid rgba(0,212,168,.25);
 }
@@ -334,7 +334,7 @@ body {
 }
 
 [data-phase="completing"] .badge--status {
-  background: var(--teal-glow); color: var(--teal);
+  background: var(--teal-dim); color: var(--teal);
   border-color: rgba(0,212,168,.3);
   animation: badge-blink .7s ease-in-out infinite;
 }
@@ -442,6 +442,7 @@ body {
 }
 .copy-btn:hover       { color: var(--text2); border-color: var(--line3); }
 .copy-btn.copy--done  { color: var(--green); border-color: var(--green); }
+.copy-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
 .log-entries {
   height: 188px;
@@ -449,7 +450,7 @@ body {
   padding: 8px 13px 10px;
   font-family: var(--mono);
   font-size: 10.5px;
-  line-height: 1.72;
+  line-height: 1.7;
   scrollbar-width: thin;
   scrollbar-color: var(--line2) transparent;
 }
@@ -460,7 +461,8 @@ body {
   opacity: 0;
   transform: translateY(2px);
   animation: le-in .2s ease forwards;
-  word-break: break-all;
+  overflow-wrap: break-word;
+  word-break: normal;
   padding: .4px 0;
 }
 @keyframes le-in { to { opacity: 1; transform: none; } }
@@ -515,10 +517,11 @@ body {
 .btn--ghost:not(:disabled):hover {
   color: var(--text2); border-color: var(--line3);
 }
+.btn--ghost:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
 .btn--primary {
   background: var(--teal);
-  color: #050b12;
+  color: #060c14;
   flex: 1;
   position: relative;
   overflow: hidden;
@@ -534,6 +537,7 @@ body {
 .btn--primary:not(:disabled):hover {
   box-shadow: 0 0 22px rgba(0,212,168,.3);
 }
+.btn--primary:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
 /* Phase overrides for primary button */
 [data-phase="scanning"]   .btn--primary,
@@ -541,7 +545,7 @@ body {
 [data-phase="completing"] .btn--primary { background: var(--surface3); color: var(--muted); box-shadow: none; }
 
 [data-phase="done"] .btn--primary {
-  background: var(--green); color: #050b12;
+  background: var(--green); color: #060c14;
 }
 [data-phase="done"] .btn--primary:not(:disabled):hover {
   box-shadow: 0 0 20px var(--green-dim);
@@ -553,4 +557,15 @@ body {
 }
 [data-phase="error"] .btn--primary:not(:disabled):hover {
   background: var(--red-dim);
+}
+
+
+/* ── REDUCED MOTION ─────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

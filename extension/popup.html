@@ -11,12 +11,12 @@
   <!-- ── HEADER ──────────────────────────────────────────────────────────── -->
   <header class="header">
     <div class="header-left">
-      <div class="phase-dot"></div>
+      <div class="phase-dot" role="img" aria-label="Status: idle"></div>
       <span class="brand">EX<em>eunt</em></span>
     </div>
     <div class="header-right">
       <span class="tab-url" id="tabUrl">…</span>
-      <button class="icon-btn" id="optionsBtn" title="Settings">⚙</button>
+      <button class="icon-btn" id="optionsBtn" title="Settings" aria-label="Settings">⚙</button>
     </div>
   </header>
 
@@ -26,7 +26,7 @@
   </div>
 
   <!-- ── DETECTION CARD ─────────────────────────────────────────────────── -->
-  <div class="detection-card">
+  <div class="detection-card" role="status" aria-live="polite">
 
     <div class="card card--visible" id="cardScanning">
       <div class="scan-anim">
@@ -42,7 +42,7 @@
       </div>
       <div class="retry-text">
         <span class="retry-label" id="retryAttempt">Retrying…</span>
-        <span class="retry-sub">Course may still be loading</span>
+        <span class="retry-sub">Looking for a SCORM course on this page…</span>
       </div>
     </div>
 
@@ -103,7 +103,7 @@
       </div>
       <button class="copy-btn" id="copyBtn">Copy</button>
     </div>
-    <div class="log-entries" id="logEntries"></div>
+    <div class="log-entries" id="logEntries" aria-live="polite" aria-label="Operation log"></div>
   </div>
 
   <!-- ── ACTIONS ────────────────────────────────────────────────────────── -->
