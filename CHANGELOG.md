@@ -5,6 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.5.0] - 2026-03-17
+
+### Added
+- Light theme via `prefers-color-scheme: light` across all 4 surfaces (popup, options, landing, privacy)
+- Dark theme remains default; light theme activates automatically based on OS preference
+- Light-specific accent colors calibrated for WCAG contrast on light backgrounds (e.g. teal #00856b vs dark's #00d4a8)
+
+---
+
 ## [1.4.0] - 2026-03-17
 
 ### Security
