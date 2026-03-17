@@ -5,6 +5,65 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.4.0] - 2026-03-17
+
+### Security
+- Fixed XSS vulnerability in options history rendering: `item.title`, `item.lms`,
+  and `domain` are now HTML-escaped before innerHTML interpolation
+
+### Accessibility
+- Added ARIA tab pattern to options sidebar (role="tablist", role="tab",
+  role="tabpanel", aria-selected) with full keyboard navigation (arrow keys)
+- Added aria-live="polite" to detection card, log panel, and save status
+- Added aria-label to phase dot (updates dynamically with phase name)
+- Added aria-label="Settings" to icon button
+- Added :focus-visible outlines on all interactive elements across popup and options
+- Fixed toggle checkbox visibility: hidden inputs now use sr-only pattern with
+  :focus-within on toggle-row for visible keyboard focus
+- Added fieldset/legend for SCORM 1.2 radio group
+- Added for/aria-labelledby associations on all options form inputs
+- Added skip-to-content links on landing and privacy pages
+- Added aria-label to distinguish header/footer nav landmarks on docs pages
+- Added prefers-reduced-motion media query (disables all animations)
+
+### Fixed
+- Interval leak: retry countdown setInterval now stored on state and cleared
+  on Re-scan click (was orphaned in closure, causing erratic display)
+- Done state no longer a dead end: Re-scan button re-enabled after completion
+- Save model contradiction resolved: removed auto-save change listeners,
+  Save button is now the only persistence trigger
+- Retry messaging improved: "Course may still be loading" replaced with
+  "Looking for a SCORM course on this page..."
+- Clipboard copy now has .catch() with "Copy failed" feedback
+- Injection failure messages harmonized between scan and completion paths
+- "No output" error now includes remediation text
+
+### Changed
+- Color tokens normalized across all 4 surfaces (popup now matches options/docs)
+- --teal-glow renamed to --teal-dim (opacity 0.15) across popup and options
+- Docs text colors raised to match extension (#eef6ff, #bdd8f0, #80a8c8)
+- dot-pulse animation replaced with transform/opacity (was box-shadow paint trigger)
+- word-break: break-all replaced with overflow-wrap: break-word in log entries
+- Options sidebar collapses to horizontal nav at 640px viewport width
+- Privacy page adds mobile breakpoint at 480px
+- Landing/privacy headers add flex-wrap for narrow viewports
+- Store listing copy rewritten to work without screenshots or images
+- Footer version updated to 1.4.0 (read from manifest at runtime)
+- Accent line standardized to 2px / 0.45 opacity across all surfaces
+- Removed unused --teal-ring CSS variable
+- Removed dead successSet variable in SCORM 2004 path
+- Added icon32.png reference in manifest for HiDPI toolbar
+- Retry interval description corrected (1500ms to 1800ms)
+- "Reset Completion History" standardized to "Clear Completion History"
+- Added Fira Code to --mono stack on docs pages
+- Replaced #00ffcc hover with #00e8bc on landing page
+- Save button border-radius normalized to 8px
+- Added main landmark to landing page
+- Added try/catch to options.js async functions
+- Quick settings now sync to state.settings on input (not just change)
+
+---
+
 ## [1.3.0] - 2026-03-17
 
 ### Fixed
