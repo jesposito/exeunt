@@ -428,14 +428,16 @@ function _completeSCORM2004(opts) {
 // Helpers injected into page (must be inlined into the function that needs them
 // - actually these are called from popup context and we format strings before passing)
 function formatHHMMSS(minutes) {
-  const m = Math.floor(minutes);
-  const s = Math.round((minutes - m) * 60);
+  let m = Math.floor(minutes);
+  let s = Math.round((minutes - m) * 60);
+  if (s >= 60) { m += 1; s = 0; }
   return `${String(m).padStart(4, '0')}:${String(s).padStart(2, '0')}:00.00`;
 }
 
 function formatPT(minutes) {
-  const m = Math.floor(minutes);
-  const s = Math.round((minutes - m) * 60);
+  let m = Math.floor(minutes);
+  let s = Math.round((minutes - m) * 60);
+  if (s >= 60) { m += 1; s = 0; }
   return s > 0 ? `PT${m}M${s}S` : `PT${m}M0S`;
 }
 

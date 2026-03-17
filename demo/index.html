@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exeunt Demo Course</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============================================================ HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">E</div>
+    <div>
+      <div class="header-title">Exeunt Demo Course</div>
+      <div class="header-sub">Realistic SCORM API sandbox for testing Exeunt</div>
+    </div>
+  </div>
+  <span class="header-badge">DEMO</span>
+</header>
+
+<div class="page-wrap">
+
+  <!-- ========================================================= MODE TOGGLE -->
+  <div class="mode-bar">
+    <span class="mode-label">SCORM Version</span>
+    <div class="mode-options">
+      <input type="radio" class="mode-radio" name="mode" id="mode-12" value="scorm12" checked />
+      <label class="mode-option" for="mode-12">
+        <span class="mode-dot"></span>
+        SCORM 1.2
+      </label>
+
+      <input type="radio" class="mode-radio" name="mode" id="mode-2004" value="scorm2004" />
+      <label class="mode-option" for="mode-2004">
+        <span class="mode-dot"></span>
+        SCORM 2004
+      </label>
+    </div>
+    <span class="mode-status" id="mode-status">
+      Active: <strong id="mode-active-label">window.API</strong>
+    </span>
+  </div>
+
+  <!-- ========================================================= TWO COLUMNS -->
+  <div class="two-col">
+
+    <!-- ---- LEFT: Live CMI State + Manual Controls -->
+    <div style="display:flex;flex-direction:column;gap:20px;">
+
+      <!-- Live SCORM State -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Live SCORM State</span>
+          <span id="session-state-badge" class="state-badge not-initialized">
+            <span class="state-dot"></span>
+            <span id="state-label">not initialised</span>
+          </span>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="cmi-table" id="cmi-table">
+            <tbody id="cmi-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Manual Controls -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Manual API Controls</span>
+        </div>
+        <div class="card-body">
+          <div class="controls-grid" id="controls-grid">
+            <!-- populated by JS -->
+          </div>
+          <div class="ctrl-setvalue" id="setvalue-row" style="margin-top:10px;">
+            <input class="ctrl-input" id="sv-key" placeholder="element (e.g. cmi.core.score.raw)" />
+            <input class="ctrl-input" id="sv-val" placeholder="value" style="max-width:90px;" />
+            <button class="ctrl-btn" id="sv-btn">SetValue</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ---- RIGHT: API Call Log + Instructions -->
+    <div style="display:flex;flex-direction:column;gap:20px;">
+
+      <!-- API Call Log -->
+      <div class="card" style="flex:1;">
+        <div class="card-head">
+          <span class="card-title">API Call Log</span>
+          <button class="ctrl-btn" id="clear-log-btn" style="padding:3px 10px;font-size:11px;">Clear</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="log-wrap" id="log-wrap">
+            <div class="log-empty" id="log-empty">No API calls yet -- initialise the session to begin.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">How to Use with Exeunt</span>
+        </div>
+        <div class="card-body instructions">
+          <h3>Testing against this page</h3>
+          <ol>
+            <li>Serve this directory with <code>python3 -m http.server 8000</code></li>
+            <li>Open <code>http://localhost:8000/demo/</code> in Chrome</li>
+            <li>Install and enable the Exeunt extension</li>
+            <li>Click the Exeunt icon in the toolbar</li>
+            <li>Exeunt should detect SCORM 1.2 or 2004 depending on the mode</li>
+            <li>Use "Complete" in Exeunt, then watch the log and CMI state update</li>
+          </ol>
+
+          <h3>Switching modes</h3>
+          <p>
+            Use the toggle above to switch between SCORM 1.2 and 2004. Switching resets all state
+            and swaps which API object lives on <code>window</code>, so Exeunt detects the correct standard.
+          </p>
+
+          <div class="tip">
+            <strong>Why not file://? </strong>Chrome does not inject content scripts into
+            <code>file://</code> URLs by default. You must serve this page over HTTP
+            (even localhost) for Exeunt to interact with it.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ SCRIPTS -->
+<script src="scorm-api.js"></script>
+<script>
+'use strict';
+
+// ---------------------------------------------------------------------------
+//  State
+// ---------------------------------------------------------------------------
+let currentMode = 'scorm12';
+const logEntries = [];
+
+// ---------------------------------------------------------------------------
+//  Helpers
+// ---------------------------------------------------------------------------
+function getActiveApi() {
+  if (currentMode === 'scorm12') return window._scormDemo.getScorm12Api();
+  return window._scormDemo.getScorm2004Api();
+}
+
+function fmt(ts) {
+  const d = new Date(ts);
+  const pad = n => String(n).padStart(2, '0');
+  return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+}
+
+function formatArgs(args) {
+  return args.map(a => {
+    if (a === '') return "''";
+    return JSON.stringify(a);
+  }).join(', ');
+}
+
+// ---------------------------------------------------------------------------
+//  CMI Table
+// ---------------------------------------------------------------------------
+function renderCmiTable() {
+  const api   = getActiveApi();
+  const state = api._getState();
+  const cmi   = api._getCmi();
+
+  // Update state badge
+  const badge = document.getElementById('session-state-badge');
+  badge.className = 'state-badge ' + state;
+  document.getElementById('state-label').textContent = state.replace(/-/g, ' ');
+
+  const tbody = document.getElementById('cmi-tbody');
+
+  // Capture previous values for change highlight
+  const prevVals = {};
+  tbody.querySelectorAll('tr[data-key]').forEach(tr => {
+    const valTd = tr.querySelector('.cmi-val');
+    if (valTd) prevVals[tr.dataset.key] = valTd.textContent;
+  });
+
+  // Remove all existing rows
+  while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+
+  for (const [key, val] of Object.entries(cmi)) {
+    const tr = document.createElement('tr');
+    tr.dataset.key = key;
+
+    const keyTd = document.createElement('td');
+    keyTd.className = 'cmi-key';
+    keyTd.textContent = key;
+
+    const valTd = document.createElement('td');
+    valTd.className = 'cmi-val';
+    if (val === '') {
+      valTd.textContent = '(empty)';
+      valTd.classList.add('empty');
+    } else {
+      valTd.textContent = val;
+      const prev = prevVals[key];
+      if (prev !== undefined && prev !== val && prev !== '(empty)') {
+        valTd.classList.add('changed');
+        setTimeout(() => valTd.classList.remove('changed'), 1500);
+      }
+    }
+
+    tr.appendChild(keyTd);
+    tr.appendChild(valTd);
+    tbody.appendChild(tr);
+  }
+}
+
+// ---------------------------------------------------------------------------
+//  Log
+// ---------------------------------------------------------------------------
+function classifyEntry(entry) {
+  if (entry.errCode && entry.errCode !== '0') return 'err';
+  if (entry.ret === 'false') return 'warn';
+  return 'ok';
+}
+
+function appendLogEntry(entry) {
+  const wrap  = document.getElementById('log-wrap');
+  const empty = document.getElementById('log-empty');
+  empty.style.display = 'none';
+
+  const div = document.createElement('div');
+  div.className = 'log-entry ' + classifyEntry(entry);
+
+  const ts = document.createElement('span');
+  ts.className = 'log-ts';
+  ts.textContent = fmt(entry.ts);
+
+  const method = document.createElement('span');
+  method.className = 'log-method';
+  method.textContent = entry.method + '(' + formatArgs(entry.args) + ')';
+
+  const ret = document.createElement('span');
+  ret.className = 'log-ret';
+  const errStr = (entry.errCode && entry.errCode !== '0') ? ' [err ' + entry.errCode + ']' : '';
+  ret.textContent = '=> ' + String(entry.ret) + errStr;
+
+  div.appendChild(ts);
+  div.appendChild(method);
+  div.appendChild(ret);
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function clearLogDom() {
+  const wrap  = document.getElementById('log-wrap');
+  const empty = document.getElementById('log-empty');
+  // Remove all log entries (keep the empty notice element)
+  const entries = wrap.querySelectorAll('.log-entry');
+  entries.forEach(el => wrap.removeChild(el));
+  empty.style.display = '';
+}
+
+// Hook into the SCORM log callback
+window._scormApiLog = function(entry) {
+  logEntries.push(entry);
+  appendLogEntry(entry);
+  renderCmiTable();
+};
+
+// ---------------------------------------------------------------------------
+//  Manual controls
+// ---------------------------------------------------------------------------
+function buildControls() {
+  const grid = document.getElementById('controls-grid');
+  // Remove existing buttons
+  while (grid.firstChild) grid.removeChild(grid.firstChild);
+
+  const is12 = currentMode === 'scorm12';
+  const initLabel   = is12 ? 'LMSInitialize'  : 'Initialize';
+  const commitLabel = is12 ? 'LMSCommit'       : 'Commit';
+  const finishLabel = is12 ? 'LMSFinish'       : 'Terminate';
+  const getErrLabel = is12 ? 'LMSGetLastError' : 'GetLastError';
+
+  const buttons = [
+    {
+      label: initLabel,
+      fn() {
+        const a = getActiveApi();
+        if (is12) { a.LMSInitialize(''); } else { a.Initialize(''); }
+      },
+    },
+    {
+      label: commitLabel,
+      fn() {
+        const a = getActiveApi();
+        if (is12) { a.LMSCommit(''); } else { a.Commit(''); }
+      },
+    },
+    {
+      label: finishLabel,
+      fn() {
+        const a = getActiveApi();
+        if (is12) { a.LMSFinish(''); } else { a.Terminate(''); }
+      },
+    },
+    {
+      label: getErrLabel,
+      fn() {
+        const a = getActiveApi();
+        if (is12) { a.LMSGetLastError(); } else { a.GetLastError(); }
+      },
+    },
+  ];
+
+  for (const { label, fn } of buttons) {
+    const btn = document.createElement('button');
+    btn.className = 'ctrl-btn';
+    btn.textContent = label + '()';
+    btn.addEventListener('click', fn);
+    grid.appendChild(btn);
+  }
+
+  // Update SetValue label/placeholder
+  document.getElementById('sv-btn').textContent = is12 ? 'LMSSetValue' : 'SetValue';
+  document.getElementById('sv-key').placeholder = is12
+    ? 'element (e.g. cmi.core.score.raw)'
+    : 'element (e.g. cmi.score.raw)';
+}
+
+document.getElementById('sv-btn').addEventListener('click', () => {
+  const key = document.getElementById('sv-key').value.trim();
+  const val = document.getElementById('sv-val').value;
+  if (!key) return;
+  const api = getActiveApi();
+  const is12 = currentMode === 'scorm12';
+  if (is12) {
+    api.LMSSetValue(key, val);
+  } else {
+    api.SetValue(key, val);
+  }
+});
+
+// ---------------------------------------------------------------------------
+//  Mode switching
+// ---------------------------------------------------------------------------
+document.querySelectorAll('.mode-radio').forEach(radio => {
+  radio.addEventListener('change', () => {
+    currentMode = radio.value;
+    logEntries.length = 0;
+
+    window._scormDemo.setScormMode(currentMode);
+
+    const label = currentMode === 'scorm12' ? 'window.API' : 'window.API_1484_11';
+    document.getElementById('mode-active-label').textContent = label;
+
+    buildControls();
+    renderCmiTable();
+    clearLogDom();
+  });
+});
+
+document.getElementById('clear-log-btn').addEventListener('click', () => {
+  logEntries.length = 0;
+  clearLogDom();
+});
+
+// ---------------------------------------------------------------------------
+//  Boot
+// ---------------------------------------------------------------------------
+buildControls();
+renderCmiTable();
+</script>
+
+</body>
+</html>
