@@ -20,6 +20,20 @@
       --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
       --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
     }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:         #f5f7fa;
+        --surface:    #e2e8f0;
+        --surface2:   #dae1eb;
+        --line:       #c0cad6;
+
+        --text:       #101820;
+        --text2:      #2a3a4a;
+        --muted:      #4a6070;
+
+        --teal:       #00856b;
+      }
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
@@ -82,13 +96,13 @@
     }
     .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
     .btn-primary {
-      background: var(--teal); color: #060c14;
+      background: var(--teal); color: var(--bg);
       padding: 12px 28px; border-radius: 8px;
       font-size: 13.5px; font-weight: 800;
       letter-spacing: 0.06em; text-transform: uppercase;
-      text-decoration: none; transition: box-shadow .2s, background .2s;
+      text-decoration: none; transition: box-shadow .2s, background .2s, filter .2s;
     }
-    .btn-primary:hover { background: #00e8bc; box-shadow: 0 0 28px rgba(0,212,168,.35); }
+    .btn-primary:hover { filter: brightness(0.85); box-shadow: 0 0 28px rgba(0,212,168,.35); }
     .btn-ghost {
       background: transparent; color: var(--text2);
       padding: 12px 28px; border-radius: 8px;

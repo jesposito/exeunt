@@ -16,6 +16,19 @@
       --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
       --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
     }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:         #f5f7fa;
+        --surface:    #e2e8f0;
+        --line:       #c0cad6;
+
+        --text:       #101820;
+        --text2:      #2a3a4a;
+        --muted:      #4a6070;
+
+        --teal:       #00856b;
+      }
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
