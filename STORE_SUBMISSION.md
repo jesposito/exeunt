@@ -37,42 +37,66 @@ The GitHub Actions release workflow (`release.yml`) does this automatically on e
 
 **Name**
 ```
-Exeunt — SCORM Course Completion Tool
+Exeunt -- SCORM Course Completion Tool
 ```
 
 **Short description** (132 chars max)
 ```
-Force-complete SCORM 1.2 and 2004 eLearning courses. For LMS developers, course testers, and QA workflows.
+Force-complete SCORM 1.2 and 2004 courses in your browser. For LMS developers, QA testers, and instructional designers.
 ```
 
 **Detailed description**
 ```
-Exeunt detects and triggers the SCORM completion sequence in any eLearning course running in your browser. Built for developers testing LMS integrations, instructional designers iterating on course builds, and QA engineers who need to verify completion behaviour without sitting through content repeatedly.
+WHAT EXEUNT DOES
 
-WHAT IT DOES
-Open any SCORM course, click the extension, click Complete Course. Exeunt injects the correct data model values, commits them, and closes the session — exactly as the course would do on genuine completion.
+Open a SCORM course in your browser. Click the extension icon. Click Complete Course.
 
-SCORM 1.2: sets cmi.core.lesson_status, score, and session_time
-SCORM 2004: sets cmi.completion_status, cmi.success_status, score, progress_measure, and session_time
+Exeunt finds the SCORM API in the page, writes the correct completion values, commits them, and closes the session. The course registers as complete in your LMS -- exactly as it would after genuine completion.
 
-ROBUST BY DESIGN
-→ Auto-retry loop — scans up to N times with configurable delay, handling courses that initialise their SCORM API after page load
-→ Multi-location search — checks window.API, window.top.API, window.parent.API, pipwerks shim, and SCORM 2004 equivalents across all accessible frames
-→ Correct write order — sets score.min and score.max before score.raw for strict LMS compliance
-→ Commit retry — retries LMSCommit on failure before reporting an error
-→ Pre-close verification — reads values back after writing to confirm they stuck
-→ Full error annotation — every return value is annotated with human-readable SCORM error strings
+SCORM 1.2: sets lesson_status (passed or completed), score (raw, min, max), and session_time.
+SCORM 2004: sets completion_status, success_status, score (raw, min, max, scaled), progress_measure, and session_time.
+
+Both standards are auto-detected. You do not need to know which version your course uses.
+
+WHY THIS EXISTS
+
+If you build, test, or maintain eLearning courses, you know the drill: open the course, click through 47 slides, answer the quiz, wait for the completion to register, do it again when the next build breaks something. Exeunt eliminates the click-through. You get a clean completion record in your LMS in seconds, not minutes.
+
+HOW IT WORKS
+
+1. Exeunt scans all frames in the active tab for a SCORM API object (window.API for 1.2, window.API_1484_11 for 2004).
+2. It checks parent frames, top frames, and common shim libraries (pipwerks, etc.).
+3. If the API is not immediately available, it retries automatically -- configurable up to 10 attempts with adjustable delay -- to handle courses that initialize late.
+4. Once found, it writes the data model values in the correct order (score.min and score.max before score.raw for strict LMS compliance).
+5. It commits the data, retries the commit if it fails, then verifies the values were accepted before closing the session.
+6. Every API call and return value is logged with human-readable SCORM error code annotations.
 
 CONFIGURABLE
-Score, session time, SCORM 1.2 status preference (passed/completed/auto), retry attempts and interval, suspend data clearing, and post-completion verification — all accessible from the options page.
+
+All settings are accessible from the options page:
+
+- Score (0-100 slider)
+- Session time (in minutes, auto-formatted to the correct SCORM time string)
+- SCORM 1.2 status preference: "passed", "completed", or auto-detect
+- Retry attempts and interval for late-loading courses
+- Optional: clear suspend_data (for resetting partially-completed courses)
+- Optional: verify values after writing (reads them back before session close)
+
+A local completion history tracks the last 50 courses you have completed, stored only in your browser.
+
+WHAT IT CANNOT DO
+
+xAPI, cmi5, and AICC courses use server-side protocols. Completion requires authenticated communication with a Learning Record Store or LMS server endpoint. A browser extension cannot forge those credentials, and Exeunt does not try. If your course uses one of these standards, Exeunt will detect it and explain why auto-completion is not possible.
+
+Courses with proprietary completion logic beyond SCORM (custom LMS API layers, JavaScript-based progress gates) may not respond to SCORM-level completion.
 
 PRIVACY
-Exeunt collects no data. Settings and a local completion history are stored in your browser only, never transmitted anywhere. No analytics, no tracking, no remote code, no servers.
 
-LIMITATIONS
-xAPI/cmi5 and AICC courses cannot be auto-completed (server-side protocol required). Courses with proprietary LMS-layer completion rules beyond SCORM may not respond. Cross-origin course iframes require switching DevTools context to the frame.
+Exeunt collects no data. Zero analytics. Zero tracking. No remote code. No network requests. Settings and completion history are stored locally in your browser via chrome.storage. Nothing is ever transmitted anywhere. The full source code is available at https://github.com/jesposito/exeunt.
 
-Open source: https://github.com/jesposito/exeunt
+OPEN SOURCE
+
+MIT licensed. Read the code, fork it, file issues. https://github.com/jesposito/exeunt
 ```
 
 ---
@@ -105,13 +129,7 @@ No. The extension executes no remote code. All JavaScript is bundled locally in 
 
 ### Assets
 
-Upload from `store-assets/`:
-
-| Asset | File | Dimensions |
-|---|---|---|
-| Screenshot 1 | `screenshot-1280x800.png` | 1280×800 |
-| Marquee tile | `marquee-1280x800.png` | 1280×800 |
-| Small promo tile | `small-promo-440x280.png` | 440×280 |
+No screenshots, marquee tiles, or promo images are required. The listing is designed to work on copy alone.
 
 **Icon** (128×128): `extension/icons/icon128.png`
 
@@ -153,8 +171,13 @@ Mozilla requires source code for review if the extension contains any minified o
 
 ### AMO listing differences
 
-- **Summary** (250 chars): same as short description above
-- **Description**: same as Chrome detailed description
+**Summary** (250 chars max):
+```
+Force-complete SCORM 1.2 and 2004 eLearning courses directly in the browser. Auto-detects the SCORM API, writes completion values, commits, and verifies. For LMS developers, QA testers, and instructional designers. Zero data collection.
+```
+
+**Description:** Same as Chrome detailed description above.
+
 - **Categories**: Web Development
 - **Privacy policy**: same URL
 

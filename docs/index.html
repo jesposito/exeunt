@@ -11,14 +11,14 @@
       --surface: #0c1825;
       --surface2: #101f30;
       --line: #1a2e42;
-      --text: #ddeeff;
-      --text2: #9abdd8;
-      --muted: #506878;
+      --text: #eef6ff;
+      --text2: #bdd8f0;
+      --muted: #80a8c8;
       --teal: #00d4a8;
       --green: #18cc72;
       --amber: #f5a020;
       --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+      --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -34,6 +34,7 @@
       border-bottom: 1px solid var(--line);
       padding: 18px 48px;
       display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
       position: relative;
     }
     header::after {
@@ -87,7 +88,7 @@
       letter-spacing: 0.06em; text-transform: uppercase;
       text-decoration: none; transition: box-shadow .2s, background .2s;
     }
-    .btn-primary:hover { background: #00ffcc; box-shadow: 0 0 28px rgba(0,212,168,.35); }
+    .btn-primary:hover { background: #00e8bc; box-shadow: 0 0 28px rgba(0,212,168,.35); }
     .btn-ghost {
       background: transparent; color: var(--text2);
       padding: 12px 28px; border-radius: 8px;
@@ -212,19 +213,27 @@
       .stat { border-right: none; border-bottom: 1px solid var(--line); }
       .features-grid { grid-template-columns: 1fr; }
       header, .section, footer { padding-left: 24px; padding-right: 24px; }
+      .stats { padding-left: 24px; padding-right: 24px; }
     }
+
+    /* SKIP LINK */
+    .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus { position: fixed; top: 10px; left: 10px; width: auto; height: auto; padding: 8px 16px; background: var(--teal); color: var(--bg); z-index: 1000; border-radius: 4px; font-weight: 800; text-decoration: none; }
   </style>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <header>
   <a href="." class="brand">EX<em>eunt</em></a>
-  <nav class="header-nav">
+  <nav class="header-nav" aria-label="Primary">
     <a href="https://github.com/jesposito/exeunt">GitHub</a>
     <a href="https://github.com/jesposito/exeunt/releases">Releases</a>
     <a href="privacy.html">Privacy</a>
   </nav>
 </header>
+
+<main id="main">
 
 <!-- HERO -->
 <section class="hero">
@@ -334,9 +343,11 @@
   </div>
 </section>
 
+</main>
+
 <footer>
-  <div class="footer-brand">EXeunt &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; v1.0.0</div>
-  <nav class="footer-links">
+  <div class="footer-brand">EXeunt &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; v1.3.0</div>
+  <nav class="footer-links" aria-label="Footer">
     <a href="https://github.com/jesposito/exeunt">GitHub</a>
     <a href="https://github.com/jesposito/exeunt/releases">Releases</a>
     <a href="https://github.com/jesposito/exeunt/issues">Issues</a>

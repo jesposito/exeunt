@@ -9,12 +9,12 @@
       --bg: #060c14;
       --surface: #0c1825;
       --line: #1a2e42;
-      --text: #ddeeff;
-      --text2: #9abdd8;
-      --muted: #506878;
+      --text: #eef6ff;
+      --text2: #bdd8f0;
+      --muted: #80a8c8;
       --teal: #00d4a8;
       --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+      --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -32,6 +32,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
       position: relative;
     }
     header::after {
@@ -39,7 +40,7 @@
       position: absolute;
       top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, transparent, var(--teal), transparent);
-      opacity: 0.5;
+      opacity: 0.45;
     }
     .brand {
       font-size: 16px; font-weight: 800;
@@ -109,13 +110,22 @@
     }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--text2); }
+
+    @media (max-width: 480px) {
+      main, header, footer { padding-left: 20px; padding-right: 20px; }
+    }
+
+    /* SKIP LINK */
+    .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus { position: fixed; top: 10px; left: 10px; width: auto; height: auto; padding: 8px 16px; background: var(--teal); color: var(--bg); z-index: 1000; border-radius: 4px; font-weight: 800; text-decoration: none; }
   </style>
 </head>
 <body>
+<a href="#privacy" class="skip-link">Skip to content</a>
 
 <header>
   <a href="." class="brand">EX<em>eunt</em></a>
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     <a href="https://github.com/jesposito/exeunt">GitHub</a>
     <a href="https://github.com/jesposito/exeunt/releases">Releases</a>
     <a href="#privacy">Privacy</a>
@@ -169,7 +179,9 @@
 </main>
 
 <footer>
-  <a href="https://github.com/jesposito/exeunt">Exeunt</a> &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; No data collected, no servers, no nonsense.
+  <nav aria-label="Footer">
+    <a href="https://github.com/jesposito/exeunt">Exeunt</a> &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; No data collected, no servers, no nonsense.
+  </nav>
 </footer>
 
 </body>
