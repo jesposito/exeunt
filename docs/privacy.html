@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exeunt — Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #060c14;
+      --surface: #0c1825;
+      --line: #1a2e42;
+      --text: #ddeeff;
+      --text2: #9abdd8;
+      --muted: #506878;
+      --teal: #00d4a8;
+      --font: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0.5;
+    }
+    .brand {
+      font-size: 16px; font-weight: 800;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+    }
+    .brand em { font-style: normal; color: var(--teal); }
+    .nav a {
+      font-size: 13px; color: var(--muted);
+      text-decoration: none; margin-left: 28px;
+      transition: color .2s;
+    }
+    .nav a:hover { color: var(--text2); }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 40px 100px;
+    }
+    .page-label {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 32px; font-weight: 900;
+      letter-spacing: -0.02em; color: var(--text);
+      margin-bottom: 8px; line-height: 1.15;
+    }
+    .updated {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--muted); margin-bottom: 48px;
+    }
+    h2 {
+      font-size: 13px; font-weight: 800;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text2); margin: 40px 0 12px;
+    }
+    p { color: var(--muted); margin-bottom: 16px; font-size: 15px; }
+    p strong { color: var(--text2); font-weight: 700; }
+    ul {
+      padding-left: 0; list-style: none;
+      margin-bottom: 16px;
+    }
+    ul li {
+      color: var(--muted); font-size: 15px;
+      padding-left: 16px; position: relative; margin-bottom: 6px;
+    }
+    ul li::before { content: '—'; position: absolute; left: 0; color: var(--line); }
+    .summary-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--teal);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 48px;
+    }
+    .summary-box p { color: var(--text2); margin: 0; font-size: 15px; }
+    .contact-link { color: var(--teal); text-decoration: none; }
+    .contact-link:hover { text-decoration: underline; }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 40px;
+      text-align: center;
+      font-size: 12px; color: var(--muted);
+      font-family: var(--mono);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text2); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="." class="brand">EX<em>eunt</em></a>
+  <nav class="nav">
+    <a href="https://github.com/jesposito/exeunt">GitHub</a>
+    <a href="https://github.com/jesposito/exeunt/releases">Releases</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+</header>
+
+<main id="privacy">
+  <div class="page-label">Legal</div>
+  <h1>Privacy Policy</h1>
+  <div class="updated">Last updated: March 2025</div>
+
+  <div class="summary-box">
+    <p><strong>The short version:</strong> Exeunt collects nothing. It stores your settings locally in your browser. It never transmits any data anywhere. There are no analytics, no tracking, no servers, and no third parties involved in any part of its operation.</p>
+  </div>
+
+  <h2>What Exeunt Does</h2>
+  <p>Exeunt is a browser extension that injects JavaScript into the active browser tab to interact with SCORM eLearning course APIs. It reads data model values from the current course and writes completion values back to the same API. All of this happens entirely within your browser, between the extension and the webpage you are currently viewing.</p>
+
+  <h2>Data We Collect</h2>
+  <p><strong>We collect no data.</strong> Exeunt does not collect, store, transmit, or share any information about you, your browsing activity, the courses you complete, your LMS, or anything else.</p>
+
+  <h2>Data Stored Locally</h2>
+  <p>Exeunt stores the following information locally in your browser using Chrome's <code>storage.sync</code> and <code>storage.local</code> APIs:</p>
+  <ul>
+    <li>Your extension settings (score, session time, retry preferences, and similar configuration)</li>
+    <li>A local history of courses completed via the extension (URL, title, timestamp, SCORM standard, score)</li>
+  </ul>
+  <p>This data never leaves your browser. It is not transmitted to any server. It is not accessible to any third party. You can clear it at any time via the extension's options page.</p>
+
+  <h2>Permissions Used</h2>
+  <p>Exeunt requests three permissions:</p>
+  <ul>
+    <li><strong>activeTab</strong> — to access the current tab when you click the extension icon</li>
+    <li><strong>scripting</strong> — to inject JavaScript into the active tab that reads and writes SCORM API values</li>
+    <li><strong>storage</strong> — to save your settings and completion history locally in the browser</li>
+  </ul>
+  <p>No host permissions are requested. The extension only operates on the tab that is active when you click the extension icon, and only when you initiate an action.</p>
+
+  <h2>Third Parties</h2>
+  <p>Exeunt has no backend. There are no servers. There are no third-party services, SDKs, analytics platforms, or advertising networks integrated into the extension. The extension contains no remote code and makes no network requests of any kind.</p>
+
+  <h2>Children</h2>
+  <p>Exeunt is a developer and professional tool not directed at children under 13. We do not knowingly collect information from children.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>If this policy changes materially, we will update the date at the top of this page and note the change in the repository's CHANGELOG. The policy will always be available at this URL.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy can be directed to the repository: <a class="contact-link" href="https://github.com/jesposito/exeunt/issues">github.com/jesposito/exeunt/issues</a></p>
+
+</main>
+
+<footer>
+  <a href="https://github.com/jesposito/exeunt">Exeunt</a> &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; No data collected, no servers, no nonsense.
+</footer>
+
+</body>
+</html>

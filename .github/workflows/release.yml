@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Update manifest version
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          python3 -c "
+          import json, sys
+          with open('extension/manifest.json') as f:
+              m = json.load(f)
+          m['version'] = '$VERSION'
+          with open('extension/manifest.json', 'w') as f:
+              json.dump(m, f, indent=2)
+          print(f'Manifest version set to {m[\"version\"]}')
+          "
+
+      - name: Build extension zip
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          # The zip must have manifest.json at root (not inside extension/)
+          cd extension
+          zip -r "../exeunt-v${VERSION}.zip" . -x "*.DS_Store" -x "__MACOSX/*"
+          cd ..
+          echo "Built: exeunt-v${VERSION}.zip"
+          ls -lh "exeunt-v${VERSION}.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Exeunt v${{ steps.version.outputs.version }}"
+          body: |
+            ## Exeunt v${{ steps.version.outputs.version }}
+
+            See [CHANGELOG.md](https://github.com/jesposito/exeunt/blob/main/CHANGELOG.md) for what changed.
+
+            ### Install
+            1. Download `exeunt-v${{ steps.version.outputs.version }}.zip` below and unzip it
+            2. Go to `chrome://extensions` and enable Developer mode
+            3. Click **Load unpacked** and select the unzipped folder
+          files: "exeunt-v${{ steps.version.outputs.version }}.zip"
+          draft: false
+          prerelease: false
