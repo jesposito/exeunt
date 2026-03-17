@@ -371,7 +371,6 @@ function _completeSCORM2004(opts) {
   ];
 
   let completionSet = false;
-  let successSet    = false;
 
   for (const [field, value] of sets) {
     const r = String(api.SetValue(field, value));
@@ -384,8 +383,6 @@ function _completeSCORM2004(opts) {
       if (r === 'false') {
         // Some implementations don't allow setting success_status independently
         L.w('success_status rejected (some 2004 impls ignore this) — completion_status should still register');
-      } else {
-        successSet = true;
       }
     }
   }
