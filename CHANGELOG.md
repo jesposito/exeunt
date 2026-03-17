@@ -5,6 +5,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.3.0] - 2026-03-17
+
+### Fixed
+- Version number in options page now reads from the manifest at runtime via
+  chrome.runtime.getManifest() instead of being hardcoded. Will always match
+  the release version automatically.
+
+---
+
 ## [1.2.0] - 2026-03-17
 
 ### Changed
