@@ -26,17 +26,17 @@ It is built for developers testing LMS integrations, L&D professionals who need 
 
 ## A Few Numbers Worth Sitting With
 
-The global corporate learning industry spends over **$400 billion every year** on training. In the United States alone, that figure cracked $100 billion in a single year. By any measure, this is one of the largest sustained investments in human development in history.
+The global corporate learning industry spends over **$400 billion every year** on training. In the United States alone, that figure cracked $100 billion in a single year. [(ATD State of the Industry, via eLearning Industry, 2025)](https://elearningindustry.com/money-spending-or-money-making-whats-your-learning-strategy-doing) By any measure, this is one of the largest sustained investments in human development in history.
 
-And yet: only **8% of CEOs report seeing meaningful ROI** from their organisation's learning and development spend.
+And yet: only **8% of CEOs report seeing meaningful ROI** from their organisation's learning and development spend. [(ATD, 2025)](https://elearningindustry.com/money-spending-or-money-making-whats-your-learning-strategy-doing)
 
-Forty-nine percent of workers, nearly half of every workforce surveyed, admit to skipping or not fully engaging with mandatory compliance training. They click through it. They open it in a background tab. They let it run while they answer email. Who could blame them.
+Forty-nine percent of workers, nearly half of every workforce surveyed, admit to skipping or not fully engaging with mandatory compliance training. [(Shortlister, via Continu)](https://www.continu.com/research/corporate-elearning-statistics) They click through it. They open it in a background tab. They let it run while they answer email. Who could blame them.
 
-Here is the research finding that should end the conversation but somehow never does: Hermann Ebbinghaus established in the 1880s, and modern neuroscience has confirmed repeatedly since, that without reinforcement humans forget roughly **50% of new information within an hour**, 70% within 24 hours, and up to **90% within a week**. This is not a theory. It is among the most replicated findings in all of cognitive psychology.
+Here is the research finding that should end the conversation but somehow never does: Hermann Ebbinghaus established in the 1880s, and modern neuroscience has confirmed repeatedly since, that without reinforcement humans forget roughly **50% of new information within an hour**, 70% within 24 hours, and up to **90% within a week**. [(Ebbinghaus, 1885; replicated Murre & Dros, PLOS ONE, 2015)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0120644) This is not a theory. It is among the most replicated findings in all of cognitive psychology.
 
 The compliance eLearning industry's response to the forgetting curve has largely been to build more courses. Longer courses. Mandatory annual re-completions of content that has not changed. More slides. More locked "Next" buttons. More knowledge checks that punish wrong answers rather than teach through them.
 
-A $6 billion industry growing at nearly 8% annually, built on a delivery mechanism that the science says does not work, measuring success by the one metric guaranteed to mean nothing: whether the learner clicked to the final slide.
+A $6 billion industry growing at nearly 8% annually, [(Mordor Intelligence, 2025)](https://www.mordorintelligence.com/industry-reports/corporate-compliance-training-market) built on a delivery mechanism that the science says does not work, measuring success by the one metric guaranteed to mean nothing: whether the learner clicked to the final slide.
 
 This is compliance theatre. And we are here to ring down the curtain.
 

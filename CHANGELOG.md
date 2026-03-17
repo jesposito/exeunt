@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.2.0] - 2026-03-17
+
+### Changed
+- README: added inline citations with links for all statistics
+  - $400B global / $100B US training spend: ATD State of the Industry via eLearning Industry (2025)
+  - 8% CEO ROI figure: ATD (2025)
+  - 49% of workers skip compliance training: Shortlister survey via Continu
+  - Forgetting curve (50/70/90%): Ebbinghaus (1885), replicated by Murre & Dros, PLOS ONE (2015)
+  - $6B compliance training market / 8% CAGR: Mordor Intelligence (2025)
+
+---
+
 ## [1.1.0] - 2026-03-17
 
 ### Fixed
