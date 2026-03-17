@@ -31,6 +31,10 @@ describe('formatHHMMSS', () => {
   it('formats 1.75 minutes', () => {
     expect(formatHHMMSS(1.75)).toBe('0001:45:00.00');
   });
+
+  it('carries over when seconds round to 60', () => {
+    expect(formatHHMMSS(0.999)).toBe('0001:00:00.00');
+  });
 });
 
 describe('formatPT', () => {
@@ -56,5 +60,9 @@ describe('formatPT', () => {
 
   it('formats 1.75 minutes', () => {
     expect(formatPT(1.75)).toBe('PT1M45S');
+  });
+
+  it('carries over when seconds round to 60', () => {
+    expect(formatPT(0.999)).toBe('PT1M0S');
   });
 });
