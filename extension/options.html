@@ -13,34 +13,34 @@
     <!-- ── SIDEBAR ───────────────────────────────────────────────────────── -->
     <nav class="sidebar">
       <div class="sidebar-brand">
-        <div class="brand-logo">◈</div>
+        <div class="brand-logo">&#9672;</div>
         <div class="brand-text">
           <div class="brand-name">EX<em>eunt</em></div>
-          <div class="brand-ver" id="brandVer">v—</div>
+          <div class="brand-ver" id="brandVer">v&#8212;</div>
         </div>
       </div>
 
-      <ul class="nav-list">
-        <li class="nav-item nav-item--active" data-tab="completion">
-          <span class="nav-icon">⊡</span> Completion
+      <ul class="nav-list" role="tablist" aria-label="Settings sections">
+        <li class="nav-item nav-item--active" data-tab="completion" role="tab" id="nav-completion" tabindex="0" aria-selected="true">
+          <span class="nav-icon" aria-hidden="true">&#8865;</span> Completion
         </li>
-        <li class="nav-item" data-tab="behaviour">
-          <span class="nav-icon">⟳</span> Behaviour
+        <li class="nav-item" data-tab="behaviour" role="tab" id="nav-behaviour" tabindex="-1" aria-selected="false">
+          <span class="nav-icon" aria-hidden="true">&#10227;</span> Behaviour
         </li>
-        <li class="nav-item" data-tab="advanced">
-          <span class="nav-icon">⌥</span> Advanced
+        <li class="nav-item" data-tab="advanced" role="tab" id="nav-advanced" tabindex="-1" aria-selected="false">
+          <span class="nav-icon" aria-hidden="true">&#8997;</span> Advanced
         </li>
-        <li class="nav-item" data-tab="history">
-          <span class="nav-icon">◷</span> History
+        <li class="nav-item" data-tab="history" role="tab" id="nav-history" tabindex="-1" aria-selected="false">
+          <span class="nav-icon" aria-hidden="true">&#9711;</span> History
         </li>
-        <li class="nav-item" data-tab="manifesto">
-          <span class="nav-icon">✦</span> Manifesto
+        <li class="nav-item" data-tab="manifesto" role="tab" id="nav-manifesto" tabindex="-1" aria-selected="false">
+          <span class="nav-icon" aria-hidden="true">&#10022;</span> Manifesto
         </li>
       </ul>
 
       <div class="sidebar-save">
         <button class="save-btn" id="saveBtn">Save Settings</button>
-        <div class="save-status" id="saveStatus"></div>
+        <div class="save-status" id="saveStatus" aria-live="polite"></div>
       </div>
     </nav>
 
@@ -48,24 +48,24 @@
     <main class="content">
 
       <!-- COMPLETION -->
-      <section class="tab-pane tab-pane--active" id="tabCompletion">
+      <section class="tab-pane tab-pane--active" id="tabCompletion" role="tabpanel" aria-labelledby="nav-completion">
         <div class="pane-header">
           <h1 class="pane-title">Completion Settings</h1>
           <p class="pane-sub">What gets written to the SCORM data model when you complete a course.</p>
         </div>
 
         <div class="form-group">
-          <label class="field-label">Score to Award</label>
-          <div class="field-desc">Percentage written to score.raw / score.scaled. Most LMSes require ≥ passing score for "passed" status. Default: 100.</div>
+          <label class="field-label" id="score-label">Score to Award</label>
+          <div class="field-desc">Percentage written to score.raw / score.scaled. Most LMSes require &#8805; passing score for "passed" status. Default: 100.</div>
           <div class="score-row">
-            <input type="range" class="slider" id="scoreSlider" min="0" max="100" step="1" value="100">
-            <input type="number" class="num-input" id="scoreNum" min="0" max="100" step="1" value="100">
+            <input type="range" class="slider" id="scoreSlider" min="0" max="100" step="1" value="100" aria-labelledby="score-label">
+            <input type="number" class="num-input" id="scoreNum" min="0" max="100" step="1" value="100" aria-labelledby="score-label">
             <span class="num-unit">/ 100</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="field-label">Session Time (minutes)</label>
+          <label class="field-label" for="sessionTime">Session Time (minutes)</label>
           <div class="field-desc">Injected as session_time (SCORM 1.2: HH:MM:SS / SCORM 2004: ISO 8601 PTxMxS). Some LMSes flag suspiciously short times. Default: 5.</div>
           <div class="inline-row">
             <input type="number" class="num-input num-input--wide" id="sessionTime" min="0" max="999" step="1" value="5">
@@ -74,26 +74,28 @@
         </div>
 
         <div class="form-group">
-          <label class="field-label">SCORM 1.2 Completion Status</label>
-          <div class="field-desc">Which value to write to <code>cmi.core.lesson_status</code>. "Auto" tries "passed" first and falls back to "completed" if the LMS rejects it.</div>
-          <div class="radio-group">
-            <label class="radio-item">
-              <input type="radio" name="scorm12Status" value="auto" checked>
-              <span class="radio-label">Auto <span class="radio-sub">tries "passed", fallback "completed"</span></span>
-            </label>
-            <label class="radio-item">
-              <input type="radio" name="scorm12Status" value="passed">
-              <span class="radio-label">Always "passed"</span>
-            </label>
-            <label class="radio-item">
-              <input type="radio" name="scorm12Status" value="completed">
-              <span class="radio-label">Always "completed" <span class="radio-sub">safer for completion-only LMSes</span></span>
-            </label>
-          </div>
+          <fieldset>
+            <legend class="field-label">SCORM 1.2 Completion Status</legend>
+            <div class="field-desc">Which value to write to <code>cmi.core.lesson_status</code>. "Auto" tries "passed" first and falls back to "completed" if the LMS rejects it.</div>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input type="radio" name="scorm12Status" value="auto" checked>
+                <span class="radio-label">Auto <span class="radio-sub">tries "passed", fallback "completed"</span></span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="scorm12Status" value="passed">
+                <span class="radio-label">Always "passed"</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="scorm12Status" value="completed">
+                <span class="radio-label">Always "completed" <span class="radio-sub">safer for completion-only LMSes</span></span>
+              </label>
+            </div>
+          </fieldset>
         </div>
 
         <div class="form-group">
-          <label class="field-label">Verify After Completion</label>
+          <label class="field-label" for="verifyAfter">Verify After Completion</label>
           <div class="field-desc">Read back the data model values before Finish/Terminate to confirm they were written correctly. Adds a few extra log lines.</div>
           <label class="toggle-row">
             <input type="checkbox" id="verifyAfter" checked>
@@ -105,14 +107,14 @@
 
 
       <!-- BEHAVIOUR -->
-      <section class="tab-pane" id="tabBehaviour">
+      <section class="tab-pane" id="tabBehaviour" role="tabpanel" aria-labelledby="nav-behaviour">
         <div class="pane-header">
           <h1 class="pane-title">Scan Behaviour</h1>
           <p class="pane-sub">How Exeunt scans for the API and what it does when it finds one.</p>
         </div>
 
         <div class="form-group">
-          <label class="field-label">Auto-scan on Open</label>
+          <label class="field-label" for="autoScan">Auto-scan on Open</label>
           <div class="field-desc">Automatically scan all frames when the popup opens. Disable if you want to trigger scans manually.</div>
           <label class="toggle-row">
             <input type="checkbox" id="autoScan" checked>
@@ -122,9 +124,9 @@
         </div>
 
         <div class="form-group">
-          <label class="field-label">Auto-complete on Detection</label>
+          <label class="field-label" for="autoComplete">Auto-complete on Detection</label>
           <div class="field-desc danger-field">
-            <span class="danger-badge">⚠ Aggressive</span>
+            <span class="danger-badge">&#9888; Aggressive</span>
             Automatically runs the completion sequence as soon as a SCORM API is detected. Useful for bulk testing. Disabled by default for safety.
           </div>
           <label class="toggle-row">
@@ -135,8 +137,8 @@
         </div>
 
         <div class="form-group">
-          <label class="field-label">Retry Attempts</label>
-          <div class="field-desc">If no SCORM API is found, how many times to retry before giving up. Useful when the course is still loading. Range: 1–15.</div>
+          <label class="field-label" for="retryCount">Retry Attempts</label>
+          <div class="field-desc">If no SCORM API is found, how many times to retry before giving up. Useful when the course is still loading. Range: 1&#8211;15.</div>
           <div class="inline-row">
             <input type="number" class="num-input num-input--wide" id="retryCount" min="1" max="15" step="1" value="6">
             <span class="num-unit">attempts</span>
@@ -144,8 +146,8 @@
         </div>
 
         <div class="form-group">
-          <label class="field-label">Retry Interval</label>
-          <div class="field-desc">Milliseconds between each retry attempt. 1500ms is a reasonable default for most LMSes.</div>
+          <label class="field-label" for="retryDelayMs">Retry Interval</label>
+          <div class="field-desc">Milliseconds between each retry attempt. 1800ms is a reasonable default for most LMSes.</div>
           <div class="inline-row">
             <input type="number" class="num-input num-input--wide" id="retryDelayMs" min="500" max="10000" step="250" value="1800">
             <span class="num-unit">ms</span>
@@ -153,7 +155,7 @@
         </div>
 
         <div class="form-group">
-          <label class="field-label">Show Tagline</label>
+          <label class="field-label" for="showTagline">Show Tagline</label>
           <div class="field-desc">Display the liberation tagline in the popup header.</div>
           <label class="toggle-row">
             <input type="checkbox" id="showTagline" checked>
@@ -165,16 +167,16 @@
 
 
       <!-- ADVANCED -->
-      <section class="tab-pane" id="tabAdvanced">
+      <section class="tab-pane" id="tabAdvanced" role="tabpanel" aria-labelledby="nav-advanced">
         <div class="pane-header">
           <h1 class="pane-title">Advanced</h1>
           <p class="pane-sub">Options for specific LMS quirks and edge cases.</p>
         </div>
 
         <div class="form-group">
-          <label class="field-label">Clear Suspend Data</label>
+          <label class="field-label" for="clearSuspendData">Clear Suspend Data</label>
           <div class="field-desc danger-field">
-            <span class="danger-badge">⚠ Destructive</span>
+            <span class="danger-badge">&#9888; Destructive</span>
             Clears <code>cmi.suspend_data</code> / <code>cmi.core.lesson_location</code> before setting completion. Use when a course stores checkpoint data that conflicts with completion. Will erase saved quiz state, progress bookmarks, etc.
           </div>
           <label class="toggle-row">
@@ -207,7 +209,7 @@
         </div>
 
         <div class="info-block">
-          <div class="info-title">Reset Completion History</div>
+          <div class="info-title">Clear Completion History</div>
           <p>Clears the local log of courses you've completed with this tool.</p>
           <button class="danger-btn" id="clearHistoryBtn">Clear History</button>
         </div>
@@ -215,7 +217,7 @@
 
 
       <!-- HISTORY -->
-      <section class="tab-pane" id="tabHistory">
+      <section class="tab-pane" id="tabHistory" role="tabpanel" aria-labelledby="nav-history">
         <div class="pane-header">
           <h1 class="pane-title">Completion History</h1>
           <p class="pane-sub">Courses completed via Exeunt in this browser. Stored locally, never transmitted.</p>
@@ -227,7 +229,7 @@
 
 
       <!-- MANIFESTO -->
-      <section class="tab-pane" id="tabManifesto">
+      <section class="tab-pane" id="tabManifesto" role="tabpanel" aria-labelledby="nav-manifesto">
         <div class="manifesto">
 
           <div class="manifesto-eyebrow">Why this tool exists</div>

@@ -26,6 +26,9 @@
 
   --font:     -apple-system, 'Segoe UI', system-ui, sans-serif;
   --mono:     'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+
+  --r:        8px;
+  --r-sm:     4px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,7 +74,7 @@ html, body {
   top: 0; left: 0;
   width: 2px; height: 100%;
   background: linear-gradient(to bottom, var(--teal), transparent 60%);
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
 .sidebar-brand {
@@ -84,7 +87,7 @@ html, body {
 
 .brand-logo {
   width: 34px; height: 34px;
-  border-radius: 8px;
+  border-radius: var(--r);
   background: var(--teal-dim);
   border: 1px solid rgba(0,212,168,.22);
   display: flex; align-items: center; justify-content: center;
@@ -124,6 +127,11 @@ html, body {
   border-left-color: var(--teal);
 }
 
+.nav-item:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
 .nav-icon { width: 16px; text-align: center; font-size: 13px; opacity: .7; }
 
 .sidebar-save {
@@ -137,7 +145,7 @@ html, body {
   background: var(--teal);
   color: #060c14;
   border: none;
-  border-radius: 7px;
+  border-radius: var(--r);
   font-size: 12px; font-weight: 800;
   letter-spacing: 0.06em; text-transform: uppercase;
   cursor: pointer;
@@ -145,6 +153,7 @@ html, body {
   font-family: var(--font);
 }
 .save-btn:hover        { box-shadow: 0 0 18px rgba(0,212,168,.28); }
+.save-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 .save-btn--done        { background: var(--green); }
 .save-status           { font-size: 10px; color: var(--muted); text-align: center; margin-top: 6px; opacity: 0; transition: opacity .3s; }
 .save-status--visible  { opacity: 1; }
@@ -190,12 +199,30 @@ html, body {
 }
 .form-group:last-child { border-bottom: none; }
 
+/* Remove default fieldset styling */
+.form-group fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
 .field-label {
   display: block;
   font-size: 12px; font-weight: 800;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text2);
   margin-bottom: 6px;
+}
+
+/* fieldset legend uses same styling as field-label */
+.form-group fieldset legend.field-label {
+  float: left;
+  width: 100%;
+  margin-bottom: 6px;
+}
+/* Clear float after legend so content flows normally */
+.form-group fieldset legend.field-label + * {
+  clear: left;
 }
 
 .field-desc {
@@ -258,6 +285,10 @@ html, body {
   border: none; border-radius: 50%;
   background: var(--teal);
 }
+.slider:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
 
 
 /* ── NUMBER INPUTS ───────────────────────────────────────────────────────── */
@@ -279,6 +310,10 @@ html, body {
 .num-input::-webkit-inner-spin-button,
 .num-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .num-input:focus { border-color: var(--teal); background: var(--surface3); }
+.num-input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
 .num-input--wide { width: 80px; }
 
 .num-unit { font-size: 12px; color: var(--muted); }
@@ -304,6 +339,11 @@ html, body {
   flex-shrink: 0;
 }
 
+.radio-item input[type="radio"]:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
 .radio-label { font-size: 13px; color: var(--text2); }
 .radio-sub   { font-size: 11px; color: var(--muted); margin-left: 4px; }
 
@@ -318,7 +358,16 @@ html, body {
   user-select: none;
 }
 
-.toggle-row input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+/* sr-only pattern: visually hidden but accessible to screen readers */
+.toggle-row input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 .toggle-track {
   width: 36px; height: 20px;
@@ -328,6 +377,12 @@ html, body {
   position: relative;
   flex-shrink: 0;
   transition: background .25s, border-color .25s;
+}
+
+/* Highlight toggle track when hidden checkbox has keyboard focus */
+.toggle-row:focus-within .toggle-track {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
 }
 
 .toggle-row input:checked ~ .toggle-track { background: var(--teal); border-color: var(--teal); }
@@ -356,7 +411,7 @@ html, body {
   padding: 16px 18px;
   background: var(--surface2);
   border: 1px solid var(--line2);
-  border-radius: 8px;
+  border-radius: var(--r);
 }
 
 .info-title {
@@ -405,6 +460,10 @@ code {
   transition: background .18s;
 }
 .danger-btn:hover { background: var(--red-dim); }
+.danger-btn:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
 
 
 /* ── HISTORY ─────────────────────────────────────────────────────────────── */
@@ -416,7 +475,7 @@ code {
   padding: 12px 16px;
   background: var(--surface2);
   border: 1px solid var(--line2);
-  border-radius: 8px;
+  border-radius: var(--r);
 }
 
 .history-meta  { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
@@ -521,4 +580,67 @@ code {
   color: var(--muted);
   font-style: italic;
   line-height: 1.6;
+}
+
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* Hide brand text, keep logo visible */
+  .sidebar-brand {
+    padding: 12px 16px;
+    border-bottom: none;
+  }
+  .brand-text {
+    display: none;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: row;
+    padding: 0 8px;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-list::-webkit-scrollbar { display: none; }
+
+  .nav-item {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-item--active {
+    border-left-color: transparent;
+    border-bottom-color: var(--teal);
+  }
+
+  .sidebar-save {
+    display: none;
+  }
+
+  /* Show Save button at bottom of content on mobile */
+  .content::after {
+    content: none;
+  }
+
+  .content {
+    padding: 24px 20px 40px;
+  }
 }
