@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exeunt — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+  <div class="layout">
+
+    <!-- ── SIDEBAR ───────────────────────────────────────────────────────── -->
+    <nav class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">◈</div>
+        <div class="brand-text">
+          <div class="brand-name">EX<em>eunt</em></div>
+          <div class="brand-ver">v2.0.0</div>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item nav-item--active" data-tab="completion">
+          <span class="nav-icon">⊡</span> Completion
+        </li>
+        <li class="nav-item" data-tab="behaviour">
+          <span class="nav-icon">⟳</span> Behaviour
+        </li>
+        <li class="nav-item" data-tab="advanced">
+          <span class="nav-icon">⌥</span> Advanced
+        </li>
+        <li class="nav-item" data-tab="history">
+          <span class="nav-icon">◷</span> History
+        </li>
+        <li class="nav-item" data-tab="manifesto">
+          <span class="nav-icon">✦</span> Manifesto
+        </li>
+      </ul>
+
+      <div class="sidebar-save">
+        <button class="save-btn" id="saveBtn">Save Settings</button>
+        <div class="save-status" id="saveStatus"></div>
+      </div>
+    </nav>
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────────────── -->
+    <main class="content">
+
+      <!-- COMPLETION -->
+      <section class="tab-pane tab-pane--active" id="tabCompletion">
+        <div class="pane-header">
+          <h1 class="pane-title">Completion Settings</h1>
+          <p class="pane-sub">What gets written to the SCORM data model when you complete a course.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Score to Award</label>
+          <div class="field-desc">Percentage written to score.raw / score.scaled. Most LMSes require ≥ passing score for "passed" status. Default: 100.</div>
+          <div class="score-row">
+            <input type="range" class="slider" id="scoreSlider" min="0" max="100" step="1" value="100">
+            <input type="number" class="num-input" id="scoreNum" min="0" max="100" step="1" value="100">
+            <span class="num-unit">/ 100</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Session Time (minutes)</label>
+          <div class="field-desc">Injected as session_time (SCORM 1.2: HH:MM:SS / SCORM 2004: ISO 8601 PTxMxS). Some LMSes flag suspiciously short times. Default: 5.</div>
+          <div class="inline-row">
+            <input type="number" class="num-input num-input--wide" id="sessionTime" min="0" max="999" step="1" value="5">
+            <span class="num-unit">minutes</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">SCORM 1.2 Completion Status</label>
+          <div class="field-desc">Which value to write to <code>cmi.core.lesson_status</code>. "Auto" tries "passed" first and falls back to "completed" if the LMS rejects it.</div>
+          <div class="radio-group">
+            <label class="radio-item">
+              <input type="radio" name="scorm12Status" value="auto" checked>
+              <span class="radio-label">Auto <span class="radio-sub">— try "passed", fallback "completed"</span></span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="scorm12Status" value="passed">
+              <span class="radio-label">Always "passed"</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="scorm12Status" value="completed">
+              <span class="radio-label">Always "completed" <span class="radio-sub">— safer for completion-only LMSes</span></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Verify After Completion</label>
+          <div class="field-desc">Read back the data model values before Finish/Terminate to confirm they were written correctly. Adds a few extra log lines.</div>
+          <label class="toggle-row">
+            <input type="checkbox" id="verifyAfter" checked>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            <span class="toggle-text">Read values back before closing session</span>
+          </label>
+        </div>
+      </section>
+
+
+      <!-- BEHAVIOUR -->
+      <section class="tab-pane" id="tabBehaviour">
+        <div class="pane-header">
+          <h1 class="pane-title">Scan Behaviour</h1>
+          <p class="pane-sub">How Exeunt scans for the API and what it does when it finds one.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Auto-scan on Open</label>
+          <div class="field-desc">Automatically scan all frames when the popup opens. Disable if you want to trigger scans manually.</div>
+          <label class="toggle-row">
+            <input type="checkbox" id="autoScan" checked>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            <span class="toggle-text">Scan immediately when popup opens</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Auto-complete on Detection</label>
+          <div class="field-desc danger-field">
+            <span class="danger-badge">⚠ Aggressive</span>
+            Automatically runs the completion sequence as soon as a SCORM API is detected. Useful for bulk testing. Disabled by default for safety.
+          </div>
+          <label class="toggle-row">
+            <input type="checkbox" id="autoComplete">
+            <span class="toggle-track toggle-track--danger"><span class="toggle-thumb"></span></span>
+            <span class="toggle-text">Complete immediately on detection</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Retry Attempts</label>
+          <div class="field-desc">If no SCORM API is found, how many times to retry before giving up. Useful when the course is still loading. Range: 1–15.</div>
+          <div class="inline-row">
+            <input type="number" class="num-input num-input--wide" id="retryCount" min="1" max="15" step="1" value="6">
+            <span class="num-unit">attempts</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Retry Interval</label>
+          <div class="field-desc">Milliseconds between each retry attempt. 1500ms is a reasonable default for most LMSes.</div>
+          <div class="inline-row">
+            <input type="number" class="num-input num-input--wide" id="retryDelayMs" min="500" max="10000" step="250" value="1800">
+            <span class="num-unit">ms</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Show Tagline</label>
+          <div class="field-desc">Display the liberation tagline in the popup header.</div>
+          <label class="toggle-row">
+            <input type="checkbox" id="showTagline" checked>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            <span class="toggle-text">Your time is not a compliance metric</span>
+          </label>
+        </div>
+      </section>
+
+
+      <!-- ADVANCED -->
+      <section class="tab-pane" id="tabAdvanced">
+        <div class="pane-header">
+          <h1 class="pane-title">Advanced</h1>
+          <p class="pane-sub">Options for specific LMS quirks and edge cases.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label">Clear Suspend Data</label>
+          <div class="field-desc danger-field">
+            <span class="danger-badge">⚠ Destructive</span>
+            Clears <code>cmi.suspend_data</code> / <code>cmi.core.lesson_location</code> before setting completion. Use when a course stores checkpoint data that conflicts with completion. Will erase saved quiz state, progress bookmarks, etc.
+          </div>
+          <label class="toggle-row">
+            <input type="checkbox" id="clearSuspendData">
+            <span class="toggle-track toggle-track--danger"><span class="toggle-thumb"></span></span>
+            <span class="toggle-text">Clear suspend_data before completing</span>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-block">
+          <div class="info-title">Cross-Origin Frames</div>
+          <p>If a course iframe is hosted on a different domain from the LMS (common with CDN-hosted content), Chrome's same-origin policy will block script injection into that frame.</p>
+          <p><strong>Workaround:</strong> Open DevTools, click the frame context selector at the top of the Console tab, switch to the course iframe, and paste the completion script from the repository directly into the console.</p>
+        </div>
+
+        <div class="info-block">
+          <div class="info-title">SCORM API Shim Detection</div>
+          <p>Exeunt searches for the API in these locations, in order:</p>
+          <ul class="code-list">
+            <li><code>window.API</code></li>
+            <li><code>window.top.API</code></li>
+            <li><code>window.parent.API</code></li>
+            <li><code>window.pipwerks.SCORM.API.handle</code></li>
+            <li><code>window.API_1484_11</code> (SCORM 2004)</li>
+            <li><code>window.top.API_1484_11</code></li>
+            <li><code>window.parent.API_1484_11</code></li>
+          </ul>
+        </div>
+
+        <div class="info-block">
+          <div class="info-title">Reset Completion History</div>
+          <p>Clears the local log of courses you've completed with this tool.</p>
+          <button class="danger-btn" id="clearHistoryBtn">Clear History</button>
+        </div>
+      </section>
+
+
+      <!-- HISTORY -->
+      <section class="tab-pane" id="tabHistory">
+        <div class="pane-header">
+          <h1 class="pane-title">Completion History</h1>
+          <p class="pane-sub">Courses completed via Exeunt in this browser. Stored locally, never transmitted.</p>
+        </div>
+        <div id="historyList" class="history-list">
+          <div class="history-empty">No completions recorded yet.</div>
+        </div>
+      </section>
+
+
+      <!-- MANIFESTO -->
+      <section class="tab-pane" id="tabManifesto">
+        <div class="manifesto">
+
+          <div class="manifesto-eyebrow">Why this tool exists</div>
+          <h1 class="manifesto-title">Against Compliance Theatre</h1>
+
+          <p class="manifesto-lead">Compliance eLearning is one of the most expensive broken promises in the modern workplace. Hundreds of billions spent globally each year on courses that treat adults like suspects, conflate clicking with understanding, and measure seat time instead of capability.</p>
+
+          <blockquote class="manifesto-quote">
+            "The map is not the territory. The completion certificate is not the competence."
+          </blockquote>
+
+          <h2 class="manifesto-h2">What bad eLearning looks like</h2>
+          <ul class="manifesto-list">
+            <li>47-slide PowerPoint-to-SCORM conversions locked behind mandatory "Next" buttons</li>
+            <li>Knowledge checks that punish incorrect answers rather than teach through them</li>
+            <li>Mandatory completion of irrelevant modules for role-based curricula</li>
+            <li>Annual re-completions of content that hasn't changed because the LMS calendar said so</li>
+            <li>Completion certificates as the primary measure of organisational capability</li>
+            <li>Courses that exist to satisfy auditors, not develop people</li>
+            <li>Minimum time-on-slide locks that prevent you from advancing even if you already know the answer</li>
+            <li>Unskippable video introductions by an executive who won't remember filming them</li>
+          </ul>
+
+          <h2 class="manifesto-h2">What it costs</h2>
+          <p>Time. The one resource that can't be recovered. Every hour a capable professional spends clicking through content they don't need is an hour not spent doing the actual work. Multiply that by your headcount. Multiply that by your annual mandatory curriculum. That's not a learning investment — it's a tax on productivity dressed up in instructional design language.</p>
+
+          <p>It also costs trust. When the learning function is experienced as something done <em>to</em> employees rather than <em>for</em> them, you create a culture where compliance checkboxes are gamed, screen-recording tools proliferate, and the entire system of organisational development loses its legitimacy.</p>
+
+          <h2 class="manifesto-h2">Who this is for</h2>
+          <ul class="manifesto-list">
+            <li><strong>L&amp;D professionals</strong> who need to test courses without sitting through 45 minutes of content for every test run</li>
+            <li><strong>Developers</strong> debugging SCORM implementations without navigating an entire course to reach the commit sequence</li>
+            <li><strong>Learners</strong> who already demonstrably hold the knowledge being assessed and shouldn't have to prove it by clicking slides</li>
+            <li><strong>Anyone</strong> who finds themselves doing mandatory compliance training for the seventh consecutive year on a topic they could teach</li>
+          </ul>
+
+          <h2 class="manifesto-h2">The counterargument (and why it's mostly wrong)</h2>
+          <p>"But the completion record exists for a reason — regulatory requirements, liability, audit trails." This is true, for a small subset of training. Genuine safety-critical knowledge checks for high-stakes roles have real justification. A 12-module induction on company values that every employee does regardless of experience or role does not.</p>
+
+          <p>The regulatory argument is also routinely used to justify far more than regulations actually require. Most auditors care that a completion record exists. They rarely care about the quality of the learning experience that preceded it. Exeunt makes the record exist. The LMS is satisfied. The auditor is satisfied. The hour you didn't waste belongs to you.</p>
+
+          <h2 class="manifesto-h2">What good looks like</h2>
+          <p>Learning that respects the learner — short, targeted, performance-focused, available on demand, designed to actually change behaviour, and structured around demonstrated outcomes rather than passive consumption. Learning where completion means something because the experience was worth completing.</p>
+
+          <p>If you're building that: you probably won't need this tool much. If you're navigating anything else: Exeunt is yours.</p>
+
+          <div class="manifesto-footer">
+            Exeunt is not a bypass for safety-critical training where demonstrated competence genuinely matters.
+            Use your judgment. You probably know which is which.
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

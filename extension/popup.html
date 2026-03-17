@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exeunt</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body data-phase="idle">
+
+  <!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="phase-dot"></div>
+      <span class="brand">EX<em>eunt</em></span>
+    </div>
+    <div class="header-right">
+      <span class="tab-url" id="tabUrl">…</span>
+      <button class="icon-btn" id="optionsBtn" title="Settings">⚙</button>
+    </div>
+  </header>
+
+  <!-- ── TAGLINE ──────────────────────────────────────────────────────────── -->
+  <div class="tagline" id="tagline">
+    Your time is not a compliance metric.
+  </div>
+
+  <!-- ── DETECTION CARD ─────────────────────────────────────────────────── -->
+  <div class="detection-card">
+
+    <div class="card card--visible" id="cardScanning">
+      <div class="scan-anim">
+        <div class="scan-ring"></div><div class="scan-ring"></div><div class="scan-ring"></div>
+        <div class="scan-core"></div>
+      </div>
+      <span class="scan-label">Scanning frames…</span>
+    </div>
+
+    <div class="card card--hidden" id="cardRetrying">
+      <div class="retry-orb">
+        <span class="retry-count" id="retryCount">3s</span>
+      </div>
+      <div class="retry-text">
+        <span class="retry-label" id="retryAttempt">Retrying…</span>
+        <span class="retry-sub">Course may still be loading</span>
+      </div>
+    </div>
+
+    <div class="card card--hidden" id="cardResult">
+      <div class="result-left">
+        <div class="lms-icon">◈</div>
+        <div class="lms-meta">
+          <div class="lms-name" id="lmsLabel">LMS</div>
+          <div class="lms-sub" id="priorStatus">API detected</div>
+        </div>
+      </div>
+      <div class="result-right">
+        <span class="badge badge--std" id="standardLabel">SCORM 2004</span>
+        <span class="badge badge--status" id="statusBadge" data-state="ready">Ready</span>
+      </div>
+    </div>
+
+    <div class="card card--hidden card--empty" id="cardNotFound">
+      <div class="empty-icon">⊘</div>
+      <div class="empty-text">No SCORM API found</div>
+    </div>
+
+    <div class="card card--hidden card--empty" id="cardUnsupported">
+      <div class="empty-icon">◌</div>
+      <div class="unsupported-badges">
+        <span class="badge badge--xapi">xAPI</span>
+        <span class="badge badge--cmi5">cmi5</span>
+        <span class="badge badge--aicc">AICC</span>
+      </div>
+      <div class="empty-text">Server-side protocol — see log</div>
+    </div>
+
+  </div>
+
+  <!-- ── QUICK SETTINGS ─────────────────────────────────────────────────── -->
+  <div class="quick-settings">
+    <label class="qs-field">
+      <span class="qs-label">Score</span>
+      <input class="qs-input" id="qScore" type="number" min="0" max="100" step="1" value="100">
+      <span class="qs-unit">/ 100</span>
+    </label>
+    <div class="qs-divider"></div>
+    <label class="qs-field">
+      <span class="qs-label">Time</span>
+      <input class="qs-input" id="qTime" type="number" min="0" max="999" step="1" value="5">
+      <span class="qs-unit">min</span>
+    </label>
+    <div class="qs-divider"></div>
+    <span class="qs-hint">More options → ⚙</span>
+  </div>
+
+  <!-- ── LOG ────────────────────────────────────────────────────────────── -->
+  <div class="log-panel">
+    <div class="log-bar">
+      <div class="log-bar-left">
+        <span class="log-title">OUTPUT</span>
+        <span class="log-count" id="logCount">0</span>
+      </div>
+      <button class="copy-btn" id="copyBtn">Copy</button>
+    </div>
+    <div class="log-entries" id="logEntries"></div>
+  </div>
+
+  <!-- ── ACTIONS ────────────────────────────────────────────────────────── -->
+  <div class="action-bar">
+    <button class="btn btn--ghost" id="scanBtn">↺ Re-scan</button>
+    <button class="btn btn--primary" id="completeBtn" disabled>▶  Complete Course</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
