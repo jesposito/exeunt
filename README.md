@@ -8,7 +8,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-teal.svg)](LICENSE)
 [![Chrome MV3](https://img.shields.io/badge/Chrome-MV3-blue.svg)](extension/manifest.json)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](CHANGELOG.md)
 
 </div>
 
