@@ -2,8 +2,9 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,46 +17,66 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get version from tag
+      - name: Read version from manifest
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-      - name: Update manifest version
         run: |
-          VERSION=${{ steps.version.outputs.version }}
-          python3 -c "
-          import json, sys
-          with open('extension/manifest.json') as f:
-              m = json.load(f)
-          m['version'] = '$VERSION'
-          with open('extension/manifest.json', 'w') as f:
-              json.dump(m, f, indent=2)
-          print(f'Manifest version set to {m[\"version\"]}')
-          "
+          VERSION=$(python3 -c "import json; print(json.load(open('extension/manifest.json'))['version'])")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Manifest version: $VERSION"
+
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Release $TAG already exists -- skipping."
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Release $TAG does not exist -- will create."
+          fi
 
       - name: Build extension zip
+        if: steps.check.outputs.exists == 'false'
         run: |
           VERSION=${{ steps.version.outputs.version }}
-          # The zip must have manifest.json at root (not inside extension/)
           cd extension
           zip -r "../exeunt-v${VERSION}.zip" . -x "*.DS_Store" -x "__MACOSX/*"
           cd ..
           echo "Built: exeunt-v${VERSION}.zip"
           ls -lh "exeunt-v${VERSION}.zip"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: "Exeunt v${{ steps.version.outputs.version }}"
-          body: |
-            ## Exeunt v${{ steps.version.outputs.version }}
+      - name: Extract changelog notes
+        if: steps.check.outputs.exists == 'false'
+        id: changelog
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          python3 - > /tmp/release_notes.md << PYEOF
+import re
 
-            See [CHANGELOG.md](https://github.com/jesposito/exeunt/blob/main/CHANGELOG.md) for what changed.
+version = "${VERSION}"
+with open("CHANGELOG.md") as f:
+    content = f.read()
 
-            ### Install
-            1. Download `exeunt-v${{ steps.version.outputs.version }}.zip` below and unzip it
-            2. Go to `chrome://extensions` and enable Developer mode
-            3. Click **Load unpacked** and select the unzipped folder
-          files: "exeunt-v${{ steps.version.outputs.version }}.zip"
-          draft: false
-          prerelease: false
+pattern = rf"## \[{re.escape(version)}\][^\n]*\n(.*?)(?=\n## \[|\Z)"
+match = re.search(pattern, content, re.DOTALL)
+print(match.group(1).strip() if match else "See CHANGELOG.md for details.")
+PYEOF
+          cat /tmp/release_notes.md
+
+      - name: Create GitHub release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          TAG="v${VERSION}"
+          gh release create "$TAG" \
+            "exeunt-v${VERSION}.zip" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Exeunt v${VERSION}" \
+            --notes-file /tmp/release_notes.md
+          echo "Release $TAG published."

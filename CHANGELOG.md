@@ -5,6 +5,32 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.0] - 2026-03-17
+
+### Fixed
+- Removed all em dashes from README, extension HTML, and CSS files
+- Manifesto list bullets changed from em dash to teal marker
+
+### Improved
+- Contrast lifted across popup and options dark theme: --text, --text2,
+  --muted, --muted2, and --slate all significantly brighter for readability
+- Manifesto blockquote lifted from muted grey to --text2 so it reads as a highlight
+
+### Changed
+- README: xAPI/cmi5 section rewritten as a genuine endorsement of the standard.
+  Explains what xAPI can capture that SCORM cannot (on-the-job performance, not
+  just course completion), why cmi5 is the right direction for new development,
+  and the actual technical reason Exeunt cannot support them without forging
+  authenticated LRS statements.
+
+### Infrastructure
+- Release workflow replaced: now triggers on every merge to main and via
+  workflow_dispatch, reads version from extension/manifest.json, skips if a
+  release for that version already exists, and pulls release notes automatically
+  from CHANGELOG.md. No more manual tag pushes required.
+
+---
+
 ## [1.0.0] — 2025-03-17
 
 ### Initial release
