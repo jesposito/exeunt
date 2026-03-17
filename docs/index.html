@@ -159,6 +159,39 @@
     .section-body p { margin-bottom: 14px; }
     .section-body strong { color: var(--text2); font-weight: 700; }
 
+    /* NAME */
+    .name-section { border-bottom: 1px solid var(--line); }
+    .name-columns {
+      display: flex; gap: 48px; align-items: flex-start;
+      margin-top: 24px;
+    }
+    .name-etymology { flex: 1; }
+    .name-etymology p { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 14px; }
+    .name-etymology strong { color: var(--text2); font-weight: 700; }
+    .name-pronunciation {
+      font-family: var(--mono); font-size: 13px;
+      color: var(--teal); margin-bottom: 14px;
+    }
+    .name-quote {
+      flex: 1;
+      border-left: 2px solid var(--teal);
+      padding: 20px 24px;
+      background: var(--surface);
+      border-radius: 0 8px 8px 0;
+    }
+    .name-quote blockquote {
+      font-size: 15px; font-style: italic;
+      color: var(--text2); line-height: 1.75;
+      margin-bottom: 12px;
+    }
+    .name-quote cite {
+      font-size: 12px; font-style: normal;
+      color: var(--muted); display: block;
+    }
+    @media (max-width: 600px) {
+      .name-columns { flex-direction: column; gap: 24px; }
+    }
+
     /* FEATURES */
     .features {
       background: var(--surface);
@@ -287,6 +320,25 @@
       <p>An LMS is an excellent audit trail. It was designed to record completion, not to produce capability. The SCORM standard was written in 2001, when the primary question was <strong>"did the learner finish?"</strong> not <strong>"can the learner perform?"</strong></p>
       <p>These are different questions. They require different answers. We have spent two decades and hundreds of billions of dollars pretending they are the same question.</p>
       <p>Exeunt is for the developers testing course integrations, the designers iterating on builds, and the learners who demonstrably hold the knowledge and see no reason to prove it by clicking slides.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NAME -->
+<section class="section name-section">
+  <div class="section-inner">
+    <div class="section-eyebrow">The name</div>
+    <h2 class="section-title">Exeunt. They all exit.</h2>
+    <div class="name-columns">
+      <div class="name-etymology">
+        <div class="name-pronunciation">/ˈɛk.sɪ.ʌnt/ &mdash; Latin, third-person plural</div>
+        <p><strong>Exeunt</strong> is a stage direction. It appears in the scripts of plays &mdash; Shakespeare's especially &mdash; to signal that all remaining characters leave the stage. Not one actor. Everyone. The scene is over.</p>
+        <p>It felt like the right word for a tool that ends the performance.</p>
+      </div>
+      <div class="name-quote">
+        <blockquote>All the world's a stage,<br>And all the men and women merely players;<br>They have their exits and their entrances.</blockquote>
+        <cite>&mdash; As You Like It, Act II, Scene VII</cite>
+      </div>
     </div>
   </div>
 </section>
