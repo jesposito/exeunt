@@ -193,6 +193,6 @@ $('saveBtn')?.addEventListener('click', saveSettings);
 // Boot
 loadSettings();
 
-// Version from manifest — always in sync with release
+// Version from manifest - always in sync with release
 const verEl = $('brandVer');
 if (verEl) verEl.textContent = 'v' + chrome.runtime.getManifest().version;

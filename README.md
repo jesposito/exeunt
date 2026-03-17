@@ -25,13 +25,13 @@ It is built for developers testing LMS integrations, L&D professionals who need 
 
 ## Why "Exeunt"
 
-*Exeunt* is a stage direction. It appears in the scripts of plays — Shakespeare's especially — to mark the moment when all remaining characters leave the stage. Not one actor. Everyone. The scene is over.
+*Exeunt* is a stage direction. It appears in the scripts of plays  - Shakespeare's especially  - to mark the moment when all remaining characters leave the stage. Not one actor. Everyone. The scene is over.
 
 > *All the world's a stage,*
 > *And all the men and women merely players;*
 > *They have their exits and their entrances.*
 >
-> — As You Like It, Act II, Scene VII
+>  - As You Like It, Act II, Scene VII
 
 It felt like the right word for a tool that ends the performance.
 

@@ -34,4 +34,4 @@ paste log here
 
 ## Additional context
 
-<!-- Anything else that might help — network tab output, LMS admin screenshots, etc -->
+<!-- Anything else that might help  - network tab output, LMS admin screenshots, etc -->
