@@ -39,6 +39,38 @@
   --mono:       'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:         #f5f7fa;
+    --bg2:        #edf0f5;
+    --surface:    #e2e8f0;
+    --surface2:   #dae1eb;
+    --surface3:   #cfd8e3;
+    --line:       #c0cad6;
+    --line2:      #b0bcc8;
+    --line3:      #a0aeb8;
+
+    --text:       #101820;
+    --text2:      #2a3a4a;
+    --muted:      #4a6070;
+    --muted2:     #6a8090;
+
+    --teal:       #00856b;
+    --teal-dim:   rgba(0, 133, 107, 0.10);
+    --green:      #0e9a55;
+    --green-dim:  rgba(14, 154, 85, 0.10);
+    --amber:      #b87a00;
+    --amber-dim:  rgba(184, 122, 0, 0.08);
+    --red:        #c83040;
+    --red-dim:    rgba(200, 48, 64, 0.08);
+    --blue:       #1a80d0;
+    --blue-dim:   rgba(26, 128, 208, 0.08);
+    --slate:      #4a7090;
+
+    --log-bg:     #ffffff;
+  }
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -521,7 +553,7 @@ body {
 
 .btn--primary {
   background: var(--teal);
-  color: #060c14;
+  color: var(--bg);
   flex: 1;
   position: relative;
   overflow: hidden;
@@ -545,7 +577,7 @@ body {
 [data-phase="completing"] .btn--primary { background: var(--surface3); color: var(--muted); box-shadow: none; }
 
 [data-phase="done"] .btn--primary {
-  background: var(--green); color: #060c14;
+  background: var(--green); color: var(--bg);
 }
 [data-phase="done"] .btn--primary:not(:disabled):hover {
   box-shadow: 0 0 20px var(--green-dim);
