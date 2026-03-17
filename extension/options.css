@@ -10,10 +10,10 @@
   --surface3: #142538;
   --line:     #1a2e42;
   --line2:    #203a52;
-  --text:     #ddeeff;
-  --text2:    #9abdd8;
-  --muted:    #506878;
-  --muted2:   #3b5060;
+  --text:     #eef6ff;
+  --text2:    #bdd8f0;
+  --muted:    #80a8c8;
+  --muted2:   #567898;
 
   --teal:     #00d4a8;
   --teal-dim: rgba(0,212,168,.12);
@@ -463,7 +463,7 @@ code {
 .manifesto-quote {
   font-style: italic;
   font-size: 14.5px;
-  color: var(--muted);
+  color: var(--text2);
   border-left: 2px solid var(--line2);
   padding: 12px 18px;
   margin: 28px 0;
@@ -503,10 +503,11 @@ code {
   position: relative;
 }
 .manifesto-list li::before {
-  content: '—';
+  content: '+';
   position: absolute;
   left: 0;
-  color: var(--muted2);
+  color: var(--teal);
+  font-weight: 700;
 }
 .manifesto-list li strong { color: var(--text2); font-weight: 700; }
 

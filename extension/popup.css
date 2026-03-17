@@ -14,10 +14,10 @@
   --line2:      #1f3a50;
   --line3:      #254459;
 
-  --text:       #dff0ff;
-  --text2:      #9bbdd8;
-  --muted:      #4f728d;
-  --muted2:     #3b5568;
+  --text:       #eef6ff;
+  --text2:      #bdd8f0;
+  --muted:      #80a8c8;
+  --muted2:     #567898;
 
   --teal:       #00d4a8;
   --teal-glow:  rgba(0, 212, 168, 0.18);
@@ -30,7 +30,7 @@
   --red-dim:    rgba(240, 72, 88, 0.1);
   --blue:       #40a8f0;
   --blue-dim:   rgba(64, 168, 240, 0.1);
-  --slate:      #5880a0;
+  --slate:      #7aaace;
 
   --log-bg:     #020810;
   --r:          8px;

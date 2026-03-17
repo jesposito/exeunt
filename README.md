@@ -4,7 +4,7 @@
 
 **The compliance theatre performance is over.**
 
-*All the world's a stage, and most of what passes for workplace learning is merely players — strutting and fretting their hour upon the screen, full of sound and fury, signifying nothing.*
+*All the world's a stage, and most of what passes for workplace learning is merely players, strutting and fretting their hour upon the screen, full of sound and fury, signifying nothing.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-teal.svg)](LICENSE)
 [![Chrome MV3](https://img.shields.io/badge/Chrome-MV3-blue.svg)](extension/manifest.json)
@@ -30,7 +30,7 @@ The global corporate learning industry spends over **$400 billion every year** o
 
 And yet: only **8% of CEOs report seeing meaningful ROI** from their organisation's learning and development spend.
 
-Forty-nine percent of workers — nearly half of every workforce surveyed — admit to skipping or not fully engaging with mandatory compliance training. They click through it. They open it in a background tab. They let it run while they answer email. Who could blame them.
+Forty-nine percent of workers, nearly half of every workforce surveyed, admit to skipping or not fully engaging with mandatory compliance training. They click through it. They open it in a background tab. They let it run while they answer email. Who could blame them.
 
 Here is the research finding that should end the conversation but somehow never does: Hermann Ebbinghaus established in the 1880s, and modern neuroscience has confirmed repeatedly since, that without reinforcement humans forget roughly **50% of new information within an hour**, 70% within 24 hours, and up to **90% within a week**. This is not a theory. It is among the most replicated findings in all of cognitive psychology.
 
@@ -44,7 +44,7 @@ This is compliance theatre. And we are here to ring down the curtain.
 
 ## The Distinction That Changes Everything
 
-There is a real argument for compliance training. Some of it. In certain contexts, documented evidence that employees have been informed of a regulation, a safety procedure, or a legal obligation has genuine value. Auditors require it. Regulators accept it as evidence of due diligence. In high-stakes domains — surgical technique, operating heavy machinery, handling hazardous materials — demonstrated competence is not bureaucratic overhead. It is the whole point.
+There is a real argument for compliance training. Some of it. In certain contexts, documented evidence that employees have been informed of a regulation, a safety procedure, or a legal obligation has genuine value. Auditors require it. Regulators accept it as evidence of due diligence. In high-stakes domains, surgical technique, operating heavy machinery, handling hazardous materials, demonstrated competence is not bureaucratic overhead. It is the whole point.
 
 This argument is routinely stretched far beyond its legitimate domain.
 
@@ -65,12 +65,28 @@ The cognitive science on this has been consistent for decades. Information stick
 - **Relevant** to something the learner already knows and cares about
 - **Applied** in context, not absorbed in isolation
 - **Spaced** across time rather than front-loaded into a single event
-- **Emotionally encoded** — connected to something that matters
+- **Emotionally encoded**, connected to something that matters
 - **Retrieved actively**, not passively consumed
 
 A forty-seven-slide SCORM module with locked navigation, mandatory minimum time-on-slide, a five-question knowledge check at the end, and an annual re-completion reminder satisfies none of these criteria. It was not designed to. It was designed to generate a completion record.
 
-The tragedy is not that organisations create bad eLearning. The tragedy is that genuinely good learning — behaviourally grounded, performance-focused, human-centred — exists and is being built by talented people every day, and it shares a delivery mechanism and a completion metric with content that has no business being called learning at all. The LMS cannot tell them apart. The completion record looks identical.
+The tragedy is not that organisations create bad eLearning. The tragedy is that genuinely good learning, behaviourally grounded, performance-focused, human-centred, exists and is being built by talented people every day, and it shares a delivery mechanism and a completion metric with content that has no business being called learning at all. The LMS cannot tell them apart. The completion record looks identical.
+
+---
+
+## A Note on xAPI and cmi5
+
+You will notice that Exeunt does not support xAPI, TinCan, or cmi5 courses. This is worth explaining, because the reason is not a technical limitation to work around. It is a deliberate acknowledgement that these standards represent a genuinely better approach.
+
+SCORM records one thing: did this person complete this course in this LMS. xAPI was designed from the ground up to answer a different and far more useful question: what is this person actually doing, and what effect is it having?
+
+An xAPI statement can capture performance on the job, not just in a course. It can record that a nurse applied a clinical skill correctly, that a sales rep used a new technique on a real call, that a technician completed a physical task in the correct sequence. Statements travel to a Learning Record Store that exists outside any single LMS, enabling an organisation to build a genuine picture of capability development over time rather than a list of completions.
+
+cmi5 extends this further, bringing LMS-style launch and registration together with xAPI's richer data model, giving organisations the tracking discipline of SCORM with the expressive power of xAPI.
+
+These are not perfect standards. Their adoption has been uneven and their tooling is still maturing. But the direction of travel is right. If you are building new learning experiences, xAPI and cmi5 are the answer to the measurement problem that SCORM was never designed to solve.
+
+Exeunt cannot complete xAPI and cmi5 courses because doing so would require forging authenticated statements to a Learning Record Store, which is a fundamentally different operation from writing values to a local JavaScript API. It is not something a browser extension can or should do. Use your LRS admin tools if you need to manipulate records for testing purposes.
 
 ---
 
@@ -88,7 +104,7 @@ The tragedy is not that organisations create bad eLearning. The tragedy is that 
 
 ## What This Is Not
 
-Exeunt is not a bypass for training where demonstrated competence genuinely matters. If a course exists because someone needs to actually learn something that affects safety — not to generate a record, but to develop real capability — then the course should be completed. Most working professionals navigate this distinction every day without difficulty.
+Exeunt is not a bypass for training where demonstrated competence genuinely matters. If a course exists because someone needs to actually learn something that affects safety, not to generate a record, but to develop real capability, then the course should be completed. Most working professionals navigate this distinction every day without difficulty.
 
 It is also not a magic bullet. An LMS that validates completion through server-side time-tracking, video progress, or proprietary activity scoring rather than SCORM status fields will not be fooled. Exeunt speaks SCORM. If your LMS has decided not to listen to SCORM, that is a different conversation.
 
@@ -102,8 +118,8 @@ Exeunt injects the correct SCORM data model values into the active tab, triggeri
 |---|---|---|
 | SCORM 1.2 | `window.API` | `lesson_status`, `score.raw/min/max`, `session_time` |
 | SCORM 2004 | `window.API_1484_11` | `completion_status`, `success_status`, `score.raw/min/max/scaled`, `progress_measure`, `session_time` |
-| xAPI / cmi5 | — | Detected, not supported (server-side LRS required) |
-| AICC | — | Detected, not supported (server-side HACP) |
+| xAPI / cmi5 | n/a | Detected and identified. Not auto-completable by design. |
+| AICC | n/a | Detected and identified. Server-side HACP protocol. |
 
 **Robustness features:** auto-retry loop with configurable attempts and interval, multi-location API search across `window`/`window.top`/`window.parent`/pipwerks shim, all-frames injection via Chrome's `allFrames: true` with `world: 'MAIN'`, correct write order for strict LMS implementations, commit retry on failure, pre-close verification, full SCORM error code annotation in the log.
 
@@ -128,7 +144,7 @@ Firefox AMO submission in progress. For now, use temporary installation via `abo
 
 ## Configuration
 
-Click **⚙** in the popup header to open the settings page.
+Click the **Settings icon** in the popup header to open the options page.
 
 | Setting | Default | Notes |
 |---|---|---|
@@ -139,7 +155,7 @@ Click **⚙** in the popup header to open the settings page.
 | Auto-complete | Off | Fires completion immediately on API detection |
 | Retry attempts | 6 | How many scans before giving up |
 | Retry interval | 1800ms | Delay between scans |
-| Clear suspend_data | Off | Destructive — clears saved progress and quiz state |
+| Clear suspend_data | Off | Destructive: clears saved progress and quiz state |
 | Verify after | On | Reads values back before closing the session |
 
 ---
@@ -148,9 +164,9 @@ Click **⚙** in the popup header to open the settings page.
 
 **Cross-origin frames:** if the course iframe is hosted on a different domain from the LMS shell, Chrome's same-origin policy blocks script injection. Workaround: open DevTools, switch the console context to the course iframe using the frame selector dropdown, and the extension will find the API there.
 
-**xAPI / cmi5:** completion requires authenticated statements to a Learning Record Store. This cannot be done from the browser.
+**xAPI / cmi5:** not supported by design. See the section above.
 
-**Proprietary tracking:** some LMSes layer additional completion logic on top of SCORM — time-on-page detection, video completion checks, minimum interaction counts. Exeunt satisfies the SCORM layer but cannot override platform-level rules.
+**Proprietary tracking:** some LMSes layer additional completion logic on top of SCORM, time-on-page detection, video completion checks, minimum interaction counts. Exeunt satisfies the SCORM layer but cannot override platform-level rules.
 
 ---
 
