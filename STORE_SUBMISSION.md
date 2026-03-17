@@ -149,9 +149,9 @@ No screenshots, marquee tiles, or promo images are required. The listing is desi
 Simple developer tools with `scripting` permission typically take 3–7 business days. The `scripting` + `activeTab` combination sometimes triggers manual review. The permission justifications above are written to pre-empt reviewer questions.
 
 If rejected, the most likely reasons are:
-1. `scripting` justification not detailed enough — expand to explain MAIN world requirement
-2. Privacy policy URL not yet live — ensure GitHub Pages is enabled before submitting
-3. Store description too vague — the detailed description above should satisfy the single-purpose requirement
+1. `scripting` justification not detailed enough  - expand to explain MAIN world requirement
+2. Privacy policy URL not yet live  - ensure GitHub Pages is enabled before submitting
+3. Store description too vague  - the detailed description above should satisfy the single-purpose requirement
 
 ---
 
@@ -159,7 +159,7 @@ If rejected, the most likely reasons are:
 
 ### Account
 
-Register at https://addons.mozilla.org/developers/ — free, no registration fee.
+Register at https://addons.mozilla.org/developers/  - free, no registration fee.
 
 ### Manifest compatibility
 
@@ -192,11 +192,11 @@ Firefox's implementation of `chrome.scripting.executeScript` with `world: 'MAIN'
 1. Go to https://github.com/jesposito/exeunt/settings/pages
 2. Source: **Deploy from a branch**
 3. Branch: `main` / folder: `/docs`
-4. Save — the site will be live at `https://jesposito.github.io/exeunt` within a few minutes
+4. Save  - the site will be live at `https://jesposito.github.io/exeunt` within a few minutes
 
 Verify:
-- `https://jesposito.github.io/exeunt/` — landing page
-- `https://jesposito.github.io/exeunt/privacy.html` — privacy policy (required for CWS submission)
+- `https://jesposito.github.io/exeunt/`  - landing page
+- `https://jesposito.github.io/exeunt/privacy.html`  - privacy policy (required for CWS submission)
 
 ---
 
@@ -205,7 +205,7 @@ Verify:
 After the first manual CWS submission, subsequent releases can be automated:
 
 ```bash
-# Bump version, commit, tag — GitHub Actions builds and attaches the zip
+# Bump version, commit, tag  - GitHub Actions builds and attaches the zip
 git add -A
 git commit -m "Release v1.1.0"
 git tag v1.1.0

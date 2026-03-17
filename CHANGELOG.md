@@ -120,7 +120,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [1.0.0] — 2025-03-17
+## [1.0.0]  - 2025-03-17
 
 ### Initial release
 
@@ -133,7 +133,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 **Robustness**
 - Multi-location API search (`window`, `window.top`, `window.parent`, pipwerks shim)
 - All-frames injection via `allFrames: true` and `world: 'MAIN'`
-- Auto-retry loop — configurable attempts and interval
+- Auto-retry loop  - configurable attempts and interval
 - Correct SCORM 1.2 write order (min/max before raw)
 - "passed" → "completed" fallback for strict LMS implementations
 - `LMSCommit()` retry on failure

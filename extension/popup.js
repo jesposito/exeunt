@@ -21,7 +21,7 @@ const DEFAULTS = {
 // ════════════════════════════════════════════════════════════════════════════
 const SCORM12_ERRORS = {
   '0':   'No error',
-  '101': 'Already initialized — continuing with existing session',
+  '101': 'Already initialized - continuing with existing session',
   '201': 'No LMS present',
   '202': 'LMSInitialize not called',
   '203': 'LMSFinish already called',
@@ -46,7 +46,7 @@ const SCORM2004_ERRORS = {
   '133': 'Store data after termination',
   '142': 'Commit before initialization',
   '143': 'Commit after termination',
-  '391': 'Completion status — element set before init',
+  '391': 'Completion status - element set before init',
   '401': 'Undefined data model element',
   '402': 'Unimplemented data model element',
   '403': 'Data model element value not initialized',
@@ -179,11 +179,11 @@ function _completeSCORM12(opts) {
 
   const api = window.API;
   if (!api) {
-    L.e('window.API not found — page may have navigated. Re-scan and try again.');
+    L.e('window.API not found - page may have navigated. Re-scan and try again.');
     return log;
   }
   if (typeof api.LMSInitialize !== 'function') {
-    L.e('window.API exists but LMSInitialize is not a function — not a valid SCORM 1.2 API');
+    L.e('window.API exists but LMSInitialize is not a function - not a valid SCORM 1.2 API');
     return log;
   }
 
@@ -197,12 +197,12 @@ function _completeSCORM12(opts) {
   if (initR === 'false') {
     const code = String(initErr);
     if (code === '101' || code === '301') {
-      L.w('Session already active — continuing without re-initializing');
+      L.w('Session already active - continuing without re-initializing');
     } else if (code === '203') {
-      L.e('LMSFinish was already called — course session is closed. Reload the course and retry.');
+      L.e('LMSFinish was already called - course session is closed. Reload the course and retry.');
       return log;
     } else {
-      L.w('LMSInitialize returned false (error ' + code + ') — attempting to proceed regardless');
+      L.w('LMSInitialize returned false (error ' + code + ') - attempting to proceed regardless');
     }
   }
 
@@ -215,7 +215,7 @@ function _completeSCORM12(opts) {
   L.kv('lesson_location   [before]', locBefore);
 
   if (statusBefore === 'passed' || statusBefore === 'completed') {
-    L.w('Already ' + statusBefore + ' — overwriting to ensure clean state');
+    L.w('Already ' + statusBefore + ' - overwriting to ensure clean state');
   }
 
   // Optionally clear suspend data
@@ -227,7 +227,7 @@ function _completeSCORM12(opts) {
   // Determine which status string to use
   let statusVal = opts.preferredStatus === 'completed' ? 'completed' : 'passed';
 
-  // Set values in the right order (min/max before raw — some strict LMSes require this)
+  // Set values in the right order (min/max before raw - some strict LMSes require this)
   const scoreInt = Math.min(100, Math.max(0, Math.round(opts.score)));
   const timeStr  = formatHHMMSS(opts.sessionMinutes);
 
@@ -249,7 +249,7 @@ function _completeSCORM12(opts) {
 
     if (field === 'cmi.core.lesson_status') {
       if (r === 'false' && statusVal === 'passed') {
-        L.w('"passed" rejected — retrying with "completed"');
+        L.w('"passed" rejected - retrying with "completed"');
         const r2 = String(api.LMSSetValue(field, 'completed'));
         const e2 = r2 === 'false' ? api.LMSGetLastError?.() : null;
         L.kv('  retry lesson_status', '"completed"  →  ' + r2 + (e2 ? '  [err ' + e2 + ']' : ''));
@@ -262,17 +262,17 @@ function _completeSCORM12(opts) {
   }
 
   if (!statusSet) {
-    L.e('lesson_status was NOT successfully set — completion may not register');
+    L.e('lesson_status was NOT successfully set - completion may not register');
   }
 
   // Commit with retry
   let commitR = String(api.LMSCommit(''));
   L.kv('LMSCommit()', commitR);
   if (commitR === 'false') {
-    L.w('Commit failed — retrying once');
+    L.w('Commit failed - retrying once');
     commitR = String(api.LMSCommit(''));
     L.kv('LMSCommit() [retry]', commitR);
-    if (commitR === 'false') L.e('Commit failed twice — data may not have persisted to LMS');
+    if (commitR === 'false') L.e('Commit failed twice - data may not have persisted to LMS');
   }
 
   // Verify before closing session
@@ -282,7 +282,7 @@ function _completeSCORM12(opts) {
     L.kv('lesson_status     [verified]', statusAfter);
     L.kv('score.raw         [verified]', scoreAfter);
     if (statusAfter !== 'passed' && statusAfter !== 'completed') {
-      L.e('Verification failed — lesson_status is "' + statusAfter + '" not passed/completed');
+      L.e('Verification failed - lesson_status is "' + statusAfter + '" not passed/completed');
     }
   }
 
@@ -290,10 +290,10 @@ function _completeSCORM12(opts) {
   L.kv('LMSFinish()', finishR);
 
   if (statusSet && commitR !== 'false') {
-    L.ok('Sequence complete — LMS should now record this course as done');
+    L.ok('Sequence complete - LMS should now record this course as done');
     L.n('The LMS may close or redirect this window shortly');
   } else {
-    L.e('Sequence completed with errors — review the log and check your LMS record');
+    L.e('Sequence completed with errors - review the log and check your LMS record');
   }
   return log;
 }
@@ -318,11 +318,11 @@ function _completeSCORM2004(opts) {
 
   const api = window.API_1484_11;
   if (!api) {
-    L.e('window.API_1484_11 not found — page may have navigated. Re-scan and try again.');
+    L.e('window.API_1484_11 not found - page may have navigated. Re-scan and try again.');
     return log;
   }
   if (typeof api.Initialize !== 'function') {
-    L.e('window.API_1484_11 exists but Initialize is not a function — not a valid SCORM 2004 API');
+    L.e('window.API_1484_11 exists but Initialize is not a function - not a valid SCORM 2004 API');
     return log;
   }
 
@@ -335,12 +335,12 @@ function _completeSCORM2004(opts) {
   if (initR === 'false') {
     const code = String(initErr);
     if (code === '103') {
-      L.w('Session already active (error 103) — continuing without re-initializing');
+      L.w('Session already active (error 103) - continuing without re-initializing');
     } else if (code === '104') {
       L.e('Content instance already terminated (error 104). Reload the course and retry.');
       return log;
     } else {
-      L.w('Initialize returned false (error ' + code + ') — attempting to proceed regardless');
+      L.w('Initialize returned false (error ' + code + ') - attempting to proceed regardless');
     }
   }
 
@@ -382,13 +382,13 @@ function _completeSCORM2004(opts) {
     if (field === 'cmi.success_status') {
       if (r === 'false') {
         // Some implementations don't allow setting success_status independently
-        L.w('success_status rejected (some 2004 impls ignore this) — completion_status should still register');
+        L.w('success_status rejected (some 2004 impls ignore this) - completion_status should still register');
       }
     }
   }
 
   if (!completionSet) {
-    L.e('completion_status was NOT successfully set — check LMS SCORM 2004 compliance');
+    L.e('completion_status was NOT successfully set - check LMS SCORM 2004 compliance');
   }
 
   // Verify before closing
@@ -400,33 +400,33 @@ function _completeSCORM2004(opts) {
     L.kv('success_status     [verified]', succAfter);
     L.kv('score.scaled       [verified]', scoreAfter);
     if (compAfter !== 'completed') {
-      L.e('Verification failed — completion_status is "' + compAfter + '"');
+      L.e('Verification failed - completion_status is "' + compAfter + '"');
     }
   }
 
   let commitR = String(api.Commit(''));
   L.kv('Commit()', commitR);
   if (commitR === 'false') {
-    L.w('Commit failed — retrying once');
+    L.w('Commit failed - retrying once');
     commitR = String(api.Commit(''));
     L.kv('Commit() [retry]', commitR);
-    if (commitR === 'false') L.e('Commit failed twice — data may not have persisted');
+    if (commitR === 'false') L.e('Commit failed twice - data may not have persisted');
   }
 
   const termR = String(api.Terminate(''));
   L.kv('Terminate()', termR);
 
   if (completionSet && commitR !== 'false') {
-    L.ok('Sequence complete — LMS should now record this course as done');
+    L.ok('Sequence complete - LMS should now record this course as done');
     L.n('The LMS may close or redirect this window shortly');
   } else {
-    L.e('Sequence completed with errors — review the log and check your LMS record');
+    L.e('Sequence completed with errors - review the log and check your LMS record');
   }
   return log;
 }
 
 // Helpers injected into page (must be inlined into the function that needs them
-// — actually these are called from popup context and we format strings before passing)
+// - actually these are called from popup context and we format strings before passing)
 function formatHHMMSS(minutes) {
   const m = Math.floor(minutes);
   const s = Math.round((minutes - m) * 60);
@@ -648,7 +648,7 @@ async function runScan(isRetry = false) {
   } catch (err) {
     appendLog([
       { t: 'e', m: `Script injection failed: ${err.message}` },
-      { t: 'w', m: 'This can happen on chrome://, extension://, or file:// pages — open an actual LMS tab.' },
+      { t: 'w', m: 'This can happen on chrome://, extension://, or file:// pages - open an actual LMS tab.' },
     ]);
     showCard('cardNotFound');
     setPhase('not-found');
@@ -678,8 +678,8 @@ async function runScan(isRetry = false) {
       logs.push({ t: 'ok', m: `SCORM 1.2 API found  [${f.s12Loc}]` });
       logs.push({ t: 'kv', k: 'Frame', v: f.url.slice(0, 90) });
     }
-    if (f.xapi) logs.push({ t: 'w', m: `xAPI/TinCan signal: "${f.xapi}" — may coexist with SCORM` });
-    if (f.aicc) logs.push({ t: 'w', m: 'AICC launch params detected — server-side only' });
+    if (f.xapi) logs.push({ t: 'w', m: `xAPI/TinCan signal: "${f.xapi}" - may coexist with SCORM` });
+    if (f.aicc) logs.push({ t: 'w', m: 'AICC launch params detected - server-side only' });
   }
 
   const lmsFrame = frames.find(f => f.lms);
@@ -705,7 +705,7 @@ async function runScan(isRetry = false) {
     $('scanBtn').disabled = false;
 
     if (state.settings.autoComplete && state.scanAttempt === 1) {
-      appendLog([{ t: 'w', m: 'Auto-complete enabled — triggering completion…' }], false);
+      appendLog([{ t: 'w', m: 'Auto-complete enabled - triggering completion…' }], false);
       await sleep(400);
       runCompletion();
     }
@@ -741,20 +741,20 @@ async function runScan(isRetry = false) {
       runScan(true);
     }, delay);
 
-    appendLog([{ t: 'w', m: `No SCORM API yet — retrying in ${Math.ceil(delay/1000)}s (attempt ${state.scanAttempt}/${maxRetries})` }], false);
+    appendLog([{ t: 'w', m: `No SCORM API yet - retrying in ${Math.ceil(delay/1000)}s (attempt ${state.scanAttempt}/${maxRetries})` }], false);
 
   } else {
     // Give up
     if (anyXAPI) {
       appendLog([
-        { t: 'e', m: 'xAPI/cmi5 only — completion requires an authenticated LRS statement' },
+        { t: 'e', m: 'xAPI/cmi5 only - completion requires an authenticated LRS statement' },
         { t: 'w', m: 'Cannot complete from the browser. Use your LRS admin panel or check if a SCORM shim is configured.' },
       ], false);
       showCard('cardUnsupported');
       setPhase('unsupported');
     } else if (anyAICC) {
       appendLog([
-        { t: 'e', m: 'AICC detected — server-side HACP protocol, cannot complete from browser' },
+        { t: 'e', m: 'AICC detected - server-side HACP protocol, cannot complete from browser' },
         { t: 'w', m: 'Use your LMS admin panel to force-complete this course.' },
       ], false);
       showCard('cardUnsupported');
@@ -763,11 +763,11 @@ async function runScan(isRetry = false) {
       appendLog([
         { t: 'e', m: `No SCORM API found after ${state.scanAttempt} scan attempt${state.scanAttempt > 1 ? 's' : ''}` },
         { t: 'n', m: 'Possible causes:' },
-        { t: 'w', m: '1 — Course not loaded yet — click Re-scan once the course is open' },
-        { t: 'w', m: '2 — Course iframe is cross-origin (CDN) — switch DevTools context to the iframe' },
-        { t: 'w', m: '3 — xAPI/cmi5 only with no SCORM shim' },
-        { t: 'w', m: '4 — Proprietary LMS tracking (no SCORM exposed)' },
-        { t: 'w', m: '5 — HTML page with no tracking at all' },
+        { t: 'w', m: '1 - Course not loaded yet - click Re-scan once the course is open' },
+        { t: 'w', m: '2 - Course iframe is cross-origin (CDN) - switch DevTools context to the iframe' },
+        { t: 'w', m: '3 - xAPI/cmi5 only with no SCORM shim' },
+        { t: 'w', m: '4 - Proprietary LMS tracking (no SCORM exposed)' },
+        { t: 'w', m: '5 - HTML page with no tracking at all' },
       ], false);
       showCard('cardNotFound');
       setPhase('not-found');
@@ -811,9 +811,9 @@ async function runCompletion() {
   } catch (err) {
     appendLog([
       { t: 'e', m: `Script injection failed: ${err.message}` },
-      { t: 'w', m: '1 — The frame may have navigated — click Re-scan and try again' },
-      { t: 'w', m: '2 — chrome://, extension://, or file:// pages cannot be injected' },
-      { t: 'w', m: '3 — Extension permissions may have changed' },
+      { t: 'w', m: '1 - The frame may have navigated - click Re-scan and try again' },
+      { t: 'w', m: '2 - chrome://, extension://, or file:// pages cannot be injected' },
+      { t: 'w', m: '3 - Extension permissions may have changed' },
     ]);
     setPhase('error');
     $('scanBtn').disabled = false;
