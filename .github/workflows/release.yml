@@ -22,7 +22,6 @@ jobs:
         run: |
           VERSION=$(python3 -c "import json; print(json.load(open('extension/manifest.json'))['version'])")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
           echo "Manifest version: $VERSION"
 
       - name: Check if release already exists
@@ -42,29 +41,25 @@ jobs:
       - name: Build extension zip
         if: steps.check.outputs.exists == 'false'
         run: |
-          VERSION=${{ steps.version.outputs.version }}
+          VERSION="${{ steps.version.outputs.version }}"
           cd extension
           zip -r "../exeunt-v${VERSION}.zip" . -x "*.DS_Store" -x "__MACOSX/*"
           cd ..
-          echo "Built: exeunt-v${VERSION}.zip"
           ls -lh "exeunt-v${VERSION}.zip"
 
       - name: Extract changelog notes
         if: steps.check.outputs.exists == 'false'
-        id: changelog
         run: |
-          VERSION=${{ steps.version.outputs.version }}
-          python3 - > /tmp/release_notes.md << PYEOF
-import re
-
-version = "${VERSION}"
-with open("CHANGELOG.md") as f:
-    content = f.read()
-
-pattern = rf"## \[{re.escape(version)}\][^\n]*\n(.*?)(?=\n## \[|\Z)"
-match = re.search(pattern, content, re.DOTALL)
-print(match.group(1).strip() if match else "See CHANGELOG.md for details.")
-PYEOF
+          VERSION="${{ steps.version.outputs.version }}"
+          # Use awk to pull the block for this version from CHANGELOG.md
+          awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" \
+            CHANGELOG.md > /tmp/release_notes.md
+          # Fall back to generic message if nothing found
+          if [ ! -s /tmp/release_notes.md ]; then
+            echo "See [CHANGELOG.md](https://github.com/$GITHUB_REPOSITORY/blob/main/CHANGELOG.md) for details." \
+              > /tmp/release_notes.md
+          fi
+          echo "--- Release notes ---"
           cat /tmp/release_notes.md
 
       - name: Create GitHub release
@@ -72,7 +67,7 @@ PYEOF
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=${{ steps.version.outputs.version }}
+          VERSION="${{ steps.version.outputs.version }}"
           TAG="v${VERSION}"
           gh release create "$TAG" \
             "exeunt-v${VERSION}.zip" \
