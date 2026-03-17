@@ -31,6 +31,33 @@
   --r-sm:     4px;
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:         #f5f7fa;
+    --bg2:        #edf0f5;
+    --surface:    #e2e8f0;
+    --surface2:   #dae1eb;
+    --surface3:   #cfd8e3;
+    --line:       #c0cad6;
+    --line2:      #b0bcc8;
+    --line3:      #a0aeb8;
+
+    --text:       #101820;
+    --text2:      #2a3a4a;
+    --muted:      #4a6070;
+    --muted2:     #6a8090;
+
+    --teal:       #00856b;
+    --teal-dim:   rgba(0, 133, 107, 0.10);
+    --green:      #0e9a55;
+    --green-dim:  rgba(14, 154, 85, 0.10);
+    --amber:      #b87a00;
+    --amber-dim:  rgba(184, 122, 0, 0.08);
+    --red:        #c83040;
+    --red-dim:    rgba(200, 48, 64, 0.08);
+  }
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -143,7 +170,7 @@ html, body {
   width: 100%;
   padding: 9px;
   background: var(--teal);
-  color: #060c14;
+  color: var(--bg);
   border: none;
   border-radius: var(--r);
   font-size: 12px; font-weight: 800;
@@ -397,7 +424,7 @@ html, body {
   transition: transform .22s, background .22s;
 }
 
-.toggle-row input:checked ~ .toggle-track .toggle-thumb { transform: translateX(16px); background: #060c14; }
+.toggle-row input:checked ~ .toggle-track .toggle-thumb { transform: translateX(16px); background: var(--bg); }
 
 .toggle-text { font-size: 12.5px; color: var(--text2); }
 
